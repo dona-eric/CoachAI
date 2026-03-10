@@ -1,0 +1,110 @@
+2026-03-10 12:44:34,908 - INFO - Starting Collecting data exercisedb of fitness...
+2026-03-10 12:44:34,908 - ERROR - Error collecting data exercisetype of fitness: unsupported operand type(s) for +: 'NoneType' and 'str'
+2026-03-10 12:50:18,252 - INFO - Starting Collecting data exercisedb of fitness...
+2026-03-10 12:50:18,254 - DEBUG - Starting new HTTPS connection (1): edb-with-videos-and-images-by-ascendapi.p.rapidapi.com:443
+2026-03-10 12:50:19,933 - DEBUG - https://edb-with-videos-and-images-by-ascendapi.p.rapidapi.com:443 "GET /api/v1/exercisetypes HTTP/1.1" 403 None
+2026-03-10 12:50:19,936 - ERROR - Failed to collect data exercisetype of fitness. Status code: 403
+2026-03-10 15:02:51,919 - INFO - Starting JSON preprocessing...
+2026-03-10 15:03:43,395 - INFO - Starting JSON preprocessing...
+2026-03-10 15:04:59,424 - INFO - Starting JSON preprocessing...
+2026-03-10 15:04:59,424 - INFO - Chargement de datadb/raw/exercises.json...
+2026-03-10 15:05:42,531 - INFO - Starting JSON preprocessing...
+2026-03-10 15:05:42,531 - INFO - Chargement de datadb/raw/exercisedb/exercises.json...
+2026-03-10 15:05:42,532 - INFO - 30 exercices trouvés
+2026-03-10 15:05:42,532 - INFO - 30 exercices traités | 0 ignorés
+2026-03-10 15:05:42,535 - INFO - JSON sauvegardé : datadb/processed/exercises_processed.json (30 entrées)
+2026-03-10 15:05:42,537 - INFO - CSV sauvegardé : datadb/processed/exercises_processed.csv (30 lignes)
+2026-03-10 15:05:42,538 - INFO - 
+ Aperçu du premier exercice :
+2026-03-10 15:09:24,339 - INFO - Starting JSON preprocessing...
+2026-03-10 15:09:24,339 - INFO - Chargement de datadb/raw/exercisedb/exercises.json...
+2026-03-10 15:09:24,340 - INFO - 30 exercices trouvés
+2026-03-10 15:09:24,341 - INFO - 30 exercices traités | 0 ignorés
+2026-03-10 15:09:24,343 - INFO - JSON sauvegardé : datadb/processed/exercises_processed.json (30 entrées)
+2026-03-10 15:09:24,345 - INFO - CSV sauvegardé : datadb/processed/exercises_processed.csv (30 lignes)
+2026-03-10 15:09:24,345 - INFO - 
+ Aperçu du premier exercice :
+2026-03-10 15:51:38,725 - INFO - Starting JSON preprocessing...
+2026-03-10 15:51:38,725 - INFO - Chargement de datadb/raw/exercisedb/exercises.json...
+2026-03-10 15:51:38,725 - INFO - 30 exercices trouvés
+2026-03-10 15:51:38,726 - INFO - 30 exercices traités | 0 ignorés
+2026-03-10 15:51:38,728 - INFO - JSON sauvegardé : datadb/processed/exercises_processed.json (30 entrées)
+2026-03-10 15:51:38,730 - INFO - CSV sauvegardé : datadb/processed/exercises_processed.csv (30 lignes)
+2026-03-10 15:51:38,730 - INFO - 
+ Aperçu du premier exercice :
+2026-03-10 16:40:48,262 - INFO - Starting CSV preprocessing...
+2026-03-10 16:41:04,142 - INFO - Starting CSV preprocessing...
+2026-03-10 16:41:20,870 - INFO - Starting CSV preprocessing...
+2026-03-10 16:42:06,115 - INFO - Starting CSV preprocessing...
+2026-03-10 16:42:06,119 - INFO - Fichier datadb/raw/musculature_exercise/exercise_dataset.csv chargé avec succès.
+2026-03-10 16:48:46,594 - INFO - Starting CSV preprocessing...
+2026-03-10 16:48:46,597 - INFO - Fichier datadb/raw/musculature_exercise/exercise_dataset.csv chargé avec succès.
+2026-03-10 16:52:30,980 - INFO - Starting CSV preprocessing...
+2026-03-10 16:52:30,983 - INFO - Fichier datadb/raw/musculature_exercise/exercise_dataset.csv chargé avec succès.
+2026-03-10 16:52:30,986 - INFO - Fichier datadb/raw/musculature_exercise/All_seperate/exercises_abductors.csv chargé avec succès.
+2026-03-10 16:52:30,987 - DEBUG - Dataframe temporaire pour datadb/raw/musculature_exercise/All_seperate/exercises_abductors.csv 
+2026-03-10 16:52:30,988 - INFO - Fichier datadb/raw/musculature_exercise/All_seperate/exercises_abs.csv chargé avec succès.
+2026-03-10 16:52:30,989 - DEBUG - Dataframe temporaire pour datadb/raw/musculature_exercise/All_seperate/exercises_abs.csv 
+2026-03-10 16:52:30,991 - INFO - Fichier datadb/raw/musculature_exercise/All_seperate/exercises_adductors.csv chargé avec succès.
+2026-03-10 16:52:30,992 - DEBUG - Dataframe temporaire pour datadb/raw/musculature_exercise/All_seperate/exercises_adductors.csv 
+2026-03-10 16:52:30,993 - INFO - Fichier datadb/raw/musculature_exercise/All_seperate/exercises_biceps.csv chargé avec succès.
+2026-03-10 16:52:30,993 - DEBUG - Dataframe temporaire pour datadb/raw/musculature_exercise/All_seperate/exercises_biceps.csv 
+2026-03-10 16:52:30,995 - INFO - Fichier datadb/raw/musculature_exercise/All_seperate/exercises_calves.csv chargé avec succès.
+2026-03-10 16:52:30,995 - DEBUG - Dataframe temporaire pour datadb/raw/musculature_exercise/All_seperate/exercises_calves.csv 
+2026-03-10 16:52:30,996 - INFO - Fichier datadb/raw/musculature_exercise/All_seperate/exercises_cardiovascular_system.csv chargé avec succès.
+2026-03-10 16:52:30,996 - DEBUG - Dataframe temporaire pour datadb/raw/musculature_exercise/All_seperate/exercises_cardiovascular_system.csv 
+2026-03-10 16:52:30,997 - INFO - Fichier datadb/raw/musculature_exercise/All_seperate/exercises_delts.csv chargé avec succès.
+2026-03-10 16:52:30,998 - DEBUG - Dataframe temporaire pour datadb/raw/musculature_exercise/All_seperate/exercises_delts.csv 
+2026-03-10 16:52:30,999 - INFO - Fichier datadb/raw/musculature_exercise/All_seperate/exercises_forearms.csv chargé avec succès.
+2026-03-10 16:52:31,000 - DEBUG - Dataframe temporaire pour datadb/raw/musculature_exercise/All_seperate/exercises_forearms.csv 
+2026-03-10 16:52:31,001 - INFO - Fichier datadb/raw/musculature_exercise/All_seperate/exercises_glutes.csv chargé avec succès.
+2026-03-10 16:52:31,002 - DEBUG - Dataframe temporaire pour datadb/raw/musculature_exercise/All_seperate/exercises_glutes.csv 
+2026-03-10 16:52:31,003 - INFO - Fichier datadb/raw/musculature_exercise/All_seperate/exercises_hamstrings.csv chargé avec succès.
+2026-03-10 16:52:31,003 - DEBUG - Dataframe temporaire pour datadb/raw/musculature_exercise/All_seperate/exercises_hamstrings.csv 
+2026-03-10 16:52:31,004 - INFO - Fichier datadb/raw/musculature_exercise/All_seperate/exercises_lats.csv chargé avec succès.
+2026-03-10 16:52:31,005 - DEBUG - Dataframe temporaire pour datadb/raw/musculature_exercise/All_seperate/exercises_lats.csv 
+2026-03-10 16:52:31,006 - INFO - Fichier datadb/raw/musculature_exercise/All_seperate/exercises_levator_scapulae.csv chargé avec succès.
+2026-03-10 16:52:31,006 - DEBUG - Dataframe temporaire pour datadb/raw/musculature_exercise/All_seperate/exercises_levator_scapulae.csv 
+2026-03-10 16:52:31,007 - INFO - Fichier datadb/raw/musculature_exercise/All_seperate/exercises_pectorals.csv chargé avec succès.
+2026-03-10 16:52:31,007 - DEBUG - Dataframe temporaire pour datadb/raw/musculature_exercise/All_seperate/exercises_pectorals.csv 
+2026-03-10 16:52:31,008 - INFO - Fichier datadb/raw/musculature_exercise/All_seperate/exercises_quads.csv chargé avec succès.
+2026-03-10 16:52:31,009 - DEBUG - Dataframe temporaire pour datadb/raw/musculature_exercise/All_seperate/exercises_quads.csv 
+2026-03-10 16:52:31,010 - INFO - Fichier datadb/raw/musculature_exercise/All_seperate/exercises_serratus_anterior.csv chargé avec succès.
+2026-03-10 16:52:31,010 - DEBUG - Dataframe temporaire pour datadb/raw/musculature_exercise/All_seperate/exercises_serratus_anterior.csv 
+2026-03-10 16:52:31,011 - INFO - Fichier datadb/raw/musculature_exercise/All_seperate/exercises_spine.csv chargé avec succès.
+2026-03-10 16:52:31,011 - DEBUG - Dataframe temporaire pour datadb/raw/musculature_exercise/All_seperate/exercises_spine.csv 
+2026-03-10 16:52:31,012 - INFO - Fichier datadb/raw/musculature_exercise/All_seperate/exercises_traps.csv chargé avec succès.
+2026-03-10 16:52:31,013 - DEBUG - Dataframe temporaire pour datadb/raw/musculature_exercise/All_seperate/exercises_traps.csv 
+2026-03-10 16:52:31,014 - INFO - Fichier datadb/raw/musculature_exercise/All_seperate/exercises_triceps.csv chargé avec succès.
+2026-03-10 16:52:31,014 - DEBUG - Dataframe temporaire pour datadb/raw/musculature_exercise/All_seperate/exercises_triceps.csv 
+2026-03-10 16:52:31,015 - INFO - Fichier datadb/raw/musculature_exercise/All_seperate/exercises_upper_back.csv chargé avec succès.
+2026-03-10 16:52:31,016 - DEBUG - Dataframe temporaire pour datadb/raw/musculature_exercise/All_seperate/exercises_upper_back.csv 
+2026-03-10 16:52:31,019 - INFO - Tous les fichiers csv ont été fusionnés avec succès.
+2026-03-10 16:52:31,025 - INFO - Doublons supprimés : 168 | Total final : 168
+2026-03-10 16:52:31,029 - INFO -  Lignes invalides supprimées : 0 | Restant : 168
+2026-03-10 16:52:31,047 - INFO - Exercices enrichis avec JSON : 6/168
+2026-03-10 16:52:31,051 - INFO - CSV sauvegardé : datadb/processed/musculature_processed.csv (168 lignes)
+2026-03-10 16:52:31,052 - INFO - JSON sauvegardé : datadb/processed/musculature_processed.json (168 entrées)
+2026-03-10 16:52:31,052 - INFO - 
+ Distribution par muscle cible :
+2026-03-10 16:52:31,055 - INFO -    abs                            : 10 exercices
+2026-03-10 16:52:31,056 - INFO -    biceps                         : 10 exercices
+2026-03-10 16:52:31,056 - INFO -    calves                         : 10 exercices
+2026-03-10 16:52:31,056 - INFO -    cardiovascular system          : 10 exercices
+2026-03-10 16:52:31,056 - INFO -    delts                          : 10 exercices
+2026-03-10 16:52:31,056 - INFO -    forearms                       : 10 exercices
+2026-03-10 16:52:31,056 - INFO -    glutes                         : 10 exercices
+2026-03-10 16:52:31,056 - INFO -    hamstrings                     : 10 exercices
+2026-03-10 16:52:31,056 - INFO -    lats                           : 10 exercices
+2026-03-10 16:52:31,057 - INFO -    pectorals                      : 10 exercices
+2026-03-10 16:52:31,057 - INFO -    quads                          : 10 exercices
+2026-03-10 16:52:31,057 - INFO -    spine                          : 10 exercices
+2026-03-10 16:52:31,057 - INFO -    traps                          : 10 exercices
+2026-03-10 16:52:31,057 - INFO -    triceps                        : 10 exercices
+2026-03-10 16:52:31,057 - INFO -    upper back                     : 10 exercices
+2026-03-10 16:52:31,057 - INFO -    adductors                      : 6 exercices
+2026-03-10 16:52:31,057 - INFO -    abductors                      : 5 exercices
+2026-03-10 16:52:31,057 - INFO -    serratus anterior              : 5 exercices
+2026-03-10 16:52:31,057 - INFO -    levator scapulae               : 2 exercices
+2026-03-10 16:52:31,057 - INFO - 
+ Preprocessing CSV terminé !
