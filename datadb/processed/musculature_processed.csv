@@ -1,0 +1,685 @@
+name,target,bodyPart,equipment,source_file,instructions,secondary_muscles,full_text,gif_url
+Lever Seated Hip Abduction,abductors,upper legs,leverage machine,exercise_dataset,,,"Exercice : Lever Seated Hip Abduction
+Partie du corps : upper legs
+Muscle ciblé : abductors
+Équipement : leverage machine",
+Side Hip Abduction,abductors,upper legs,body weight,exercise_dataset,,,"Exercice : Side Hip Abduction
+Partie du corps : upper legs
+Muscle ciblé : abductors
+Équipement : body weight",
+Straight Leg Outer Hip Abductor,abductors,upper legs,body weight,exercise_dataset,,,"Exercice : Straight Leg Outer Hip Abductor
+Partie du corps : upper legs
+Muscle ciblé : abductors
+Équipement : body weight",
+Side Bridge Hip Abduction,abductors,upper legs,body weight,exercise_dataset,,,"Exercice : Side Bridge Hip Abduction
+Partie du corps : upper legs
+Muscle ciblé : abductors
+Équipement : body weight",
+Resistance Band Seated Hip Abduction,abductors,upper legs,resistance band,exercise_dataset,,,"Exercice : Resistance Band Seated Hip Abduction
+Partie du corps : upper legs
+Muscle ciblé : abductors
+Équipement : resistance band",
+3/4 Sit-Up,abs,waist,body weight,exercise_dataset,,,"Exercice : 3/4 Sit-Up
+Partie du corps : waist
+Muscle ciblé : abs
+Équipement : body weight",
+45° Side Bend,abs,waist,body weight,exercise_dataset,,,"Exercice : 45° Side Bend
+Partie du corps : waist
+Muscle ciblé : abs
+Équipement : body weight",
+Air Bike,abs,waist,body weight,exercise_dataset,,,"Exercice : Air Bike
+Partie du corps : waist
+Muscle ciblé : abs
+Équipement : body weight",
+Alternate Heel Touchers,abs,waist,body weight,exercise_dataset,,,"Exercice : Alternate Heel Touchers
+Partie du corps : waist
+Muscle ciblé : abs
+Équipement : body weight",
+Assisted Hanging Knee Raise With Throw Down,abs,waist,assisted,exercise_dataset,"Hang from a pull-up bar with your arms fully extended and your palms facing away from you. | Engage your core and lift your knees towards your chest, keeping your legs together. | Once your knees are at chest level, explosively throw your legs down towards the ground, extending them fully. | Allow your legs to swing back up and repeat the movement for the desired number of repetitions.","hip flexors, lower back","Exercice : Assisted Hanging Knee Raise With Throw Down
+    Parties du corps : waist
+    Muscles ciblés : abs
+    Muscles secondaires : hip flexors, lower back
+    Équipement : assisted
+    Instructions : Hang from a pull-up bar with your arms fully extended and your palms facing away from you. | Engage your core and lift your knees towards your chest, keeping your legs together. | Once your knees are at chest level, explosively throw your legs down towards the ground, extending them fully. | Allow your legs to swing back up and repeat the movement for the desired number of repetitions.",8K0w2yA.gif
+Assisted Hanging Knee Raise,abs,waist,assisted,exercise_dataset,,,"Exercice : Assisted Hanging Knee Raise
+Partie du corps : waist
+Muscle ciblé : abs
+Équipement : assisted",
+Assisted Lying Leg Raise With Lateral Throw Down,abs,waist,assisted,exercise_dataset,,,"Exercice : Assisted Lying Leg Raise With Lateral Throw Down
+Partie du corps : waist
+Muscle ciblé : abs
+Équipement : assisted",
+Assisted Lying Leg Raise With Throw Down,abs,waist,assisted,exercise_dataset,,,"Exercice : Assisted Lying Leg Raise With Throw Down
+Partie du corps : waist
+Muscle ciblé : abs
+Équipement : assisted",
+Assisted Motion Russian Twist,abs,waist,medicine ball,exercise_dataset,,,"Exercice : Assisted Motion Russian Twist
+Partie du corps : waist
+Muscle ciblé : abs
+Équipement : medicine ball",
+Barbell Press Sit-Up,abs,waist,barbell,exercise_dataset,,,"Exercice : Barbell Press Sit-Up
+Partie du corps : waist
+Muscle ciblé : abs
+Équipement : barbell",
+Cable Hip Adduction,adductors,upper legs,cable,exercise_dataset,,,"Exercice : Cable Hip Adduction
+Partie du corps : upper legs
+Muscle ciblé : adductors
+Équipement : cable",
+Lever Seated Hip Adduction,adductors,upper legs,leverage machine,exercise_dataset,,,"Exercice : Lever Seated Hip Adduction
+Partie du corps : upper legs
+Muscle ciblé : adductors
+Équipement : leverage machine",
+Butterfly Yoga Pose,adductors,upper legs,body weight,exercise_dataset,,,"Exercice : Butterfly Yoga Pose
+Partie du corps : upper legs
+Muscle ciblé : adductors
+Équipement : body weight",
+Assisted Side Lying Adductor Stretch,adductors,upper legs,assisted,exercise_dataset,,,"Exercice : Assisted Side Lying Adductor Stretch
+Partie du corps : upper legs
+Muscle ciblé : adductors
+Équipement : assisted",
+Side Plank Hip Adduction,adductors,upper legs,body weight,exercise_dataset,,,"Exercice : Side Plank Hip Adduction
+Partie du corps : upper legs
+Muscle ciblé : adductors
+Équipement : body weight",
+Side Lying Hip Adduction (Male),adductors,upper legs,body weight,exercise_dataset,,,"Exercice : Side Lying Hip Adduction (Male)
+Partie du corps : upper legs
+Muscle ciblé : adductors
+Équipement : body weight",
+Barbell Alternate Biceps Curl,biceps,upper arms,barbell,exercise_dataset,,,"Exercice : Barbell Alternate Biceps Curl
+Partie du corps : upper arms
+Muscle ciblé : biceps
+Équipement : barbell",
+Barbell Curl,biceps,upper arms,barbell,exercise_dataset,,,"Exercice : Barbell Curl
+Partie du corps : upper arms
+Muscle ciblé : biceps
+Équipement : barbell",
+Barbell Drag Curl,biceps,upper arms,barbell,exercise_dataset,,,"Exercice : Barbell Drag Curl
+Partie du corps : upper arms
+Muscle ciblé : biceps
+Équipement : barbell",
+Barbell Lying Preacher Curl,biceps,upper arms,barbell,exercise_dataset,,,"Exercice : Barbell Lying Preacher Curl
+Partie du corps : upper arms
+Muscle ciblé : biceps
+Équipement : barbell",
+Barbell Preacher Curl,biceps,upper arms,barbell,exercise_dataset,,,"Exercice : Barbell Preacher Curl
+Partie du corps : upper arms
+Muscle ciblé : biceps
+Équipement : barbell",
+Barbell Prone Incline Curl,biceps,upper arms,barbell,exercise_dataset,,,"Exercice : Barbell Prone Incline Curl
+Partie du corps : upper arms
+Muscle ciblé : biceps
+Équipement : barbell",
+Barbell Reverse Curl,biceps,upper arms,barbell,exercise_dataset,,,"Exercice : Barbell Reverse Curl
+Partie du corps : upper arms
+Muscle ciblé : biceps
+Équipement : barbell",
+Barbell Reverse Preacher Curl,biceps,upper arms,barbell,exercise_dataset,,,"Exercice : Barbell Reverse Preacher Curl
+Partie du corps : upper arms
+Muscle ciblé : biceps
+Équipement : barbell",
+Barbell Seated Close-Grip Concentration Curl,biceps,upper arms,barbell,exercise_dataset,,,"Exercice : Barbell Seated Close-Grip Concentration Curl
+Partie du corps : upper arms
+Muscle ciblé : biceps
+Équipement : barbell",
+Barbell Standing Close Grip Curl,biceps,upper arms,barbell,exercise_dataset,"Stand up straight with your feet shoulder-width apart and hold a barbell with an underhand grip, hands close together. | Keep your elbows close to your torso and your upper arms stationary throughout the movement. | Exhale as you curl the weights while contracting your biceps. Continue to raise the bar until your biceps are fully contracted and the bar is at shoulder level. | Hold the contracted position for a brief pause as you squeeze your biceps. | Inhale as you slowly begin to bring the barbell back to the starting position. | Repeat for the desired number of repetitions.",forearms,"Exercice : Barbell Standing Close Grip Curl
+    Parties du corps : upper arms
+    Muscles ciblés : biceps
+    Muscles secondaires : forearms
+    Équipement : barbell
+    Instructions : Stand up straight with your feet shoulder-width apart and hold a barbell with an underhand grip, hands close together. | Keep your elbows close to your torso and your upper arms stationary throughout the movement. | Exhale as you curl the weights while contracting your biceps. Continue to raise the bar until your biceps are fully contracted and the bar is at shoulder level. | Hold the contracted position for a brief pause as you squeeze your biceps. | Inhale as you slowly begin to bring the barbell back to the starting position. | Repeat for the desired number of repetitions.",4dUn2iv.gif
+Barbell Seated Calf Raise,calves,lower legs,barbell,exercise_dataset,,,"Exercice : Barbell Seated Calf Raise
+Partie du corps : lower legs
+Muscle ciblé : calves
+Équipement : barbell",
+Barbell Standing Leg Calf Raise,calves,lower legs,barbell,exercise_dataset,,,"Exercice : Barbell Standing Leg Calf Raise
+Partie du corps : lower legs
+Muscle ciblé : calves
+Équipement : barbell",
+Barbell Standing Rocking Leg Calf Raise,calves,lower legs,barbell,exercise_dataset,"Stand with your feet shoulder-width apart and hold a barbell across your upper back. | Raise your heels off the ground as high as possible, balancing on the balls of your feet. | Slowly lower your heels back down to the starting position. | Repeat for the desired number of repetitions.","hamstrings, quadriceps","Exercice : Barbell Standing Rocking Leg Calf Raise
+    Parties du corps : lower legs
+    Muscles ciblés : calves
+    Muscles secondaires : hamstrings, quadriceps
+    Équipement : barbell
+    Instructions : Stand with your feet shoulder-width apart and hold a barbell across your upper back. | Raise your heels off the ground as high as possible, balancing on the balls of your feet. | Slowly lower your heels back down to the starting position. | Repeat for the desired number of repetitions.",6HiHHe0.gif
+Circles Knee Stretch,calves,lower legs,body weight,exercise_dataset,,,"Exercice : Circles Knee Stretch
+Partie du corps : lower legs
+Muscle ciblé : calves
+Équipement : body weight",
+Donkey Calf Raise,calves,lower legs,body weight,exercise_dataset,,,"Exercice : Donkey Calf Raise
+Partie du corps : lower legs
+Muscle ciblé : calves
+Équipement : body weight",
+Dumbbell Seated One Leg Calf Raise,calves,lower legs,dumbbell,exercise_dataset,,,"Exercice : Dumbbell Seated One Leg Calf Raise
+Partie du corps : lower legs
+Muscle ciblé : calves
+Équipement : dumbbell",
+Dumbbell Single Leg Calf Raise,calves,lower legs,dumbbell,exercise_dataset,,,"Exercice : Dumbbell Single Leg Calf Raise
+Partie du corps : lower legs
+Muscle ciblé : calves
+Équipement : dumbbell",
+Dumbbell Standing Calf Raise,calves,lower legs,dumbbell,exercise_dataset,,,"Exercice : Dumbbell Standing Calf Raise
+Partie du corps : lower legs
+Muscle ciblé : calves
+Équipement : dumbbell",
+Lever Seated Calf Raise,calves,lower legs,leverage machine,exercise_dataset,,,"Exercice : Lever Seated Calf Raise
+Partie du corps : lower legs
+Muscle ciblé : calves
+Équipement : leverage machine",
+Lever Standing Calf Raise,calves,lower legs,leverage machine,exercise_dataset,,,"Exercice : Lever Standing Calf Raise
+Partie du corps : lower legs
+Muscle ciblé : calves
+Équipement : leverage machine",
+Jack Burpee,cardiovascular system,cardio,body weight,exercise_dataset,,,"Exercice : Jack Burpee
+Partie du corps : cardio
+Muscle ciblé : cardiovascular system
+Équipement : body weight",
+Mountain Climber,cardiovascular system,cardio,body weight,exercise_dataset,,,"Exercice : Mountain Climber
+Partie du corps : cardio
+Muscle ciblé : cardiovascular system
+Équipement : body weight",
+Run (Equipment),cardiovascular system,cardio,body weight,exercise_dataset,,,"Exercice : Run (Equipment)
+Partie du corps : cardio
+Muscle ciblé : cardiovascular system
+Équipement : body weight",
+Run,cardiovascular system,cardio,body weight,exercise_dataset,,,"Exercice : Run
+Partie du corps : cardio
+Muscle ciblé : cardiovascular system
+Équipement : body weight",
+Stationary Bike Walk,cardiovascular system,cardio,leverage machine,exercise_dataset,,,"Exercice : Stationary Bike Walk
+Partie du corps : cardio
+Muscle ciblé : cardiovascular system
+Équipement : leverage machine",
+Burpee,cardiovascular system,cardio,body weight,exercise_dataset,,,"Exercice : Burpee
+Partie du corps : cardio
+Muscle ciblé : cardiovascular system
+Équipement : body weight",
+Dumbbell Burpee,cardiovascular system,cardio,dumbbell,exercise_dataset,,,"Exercice : Dumbbell Burpee
+Partie du corps : cardio
+Muscle ciblé : cardiovascular system
+Équipement : dumbbell",
+Stationary Bike Run V. 3,cardiovascular system,cardio,stationary bike,exercise_dataset,,,"Exercice : Stationary Bike Run V. 3
+Partie du corps : cardio
+Muscle ciblé : cardiovascular system
+Équipement : stationary bike",
+Walk Elliptical Cross Trainer,cardiovascular system,cardio,elliptical machine,exercise_dataset,,,"Exercice : Walk Elliptical Cross Trainer
+Partie du corps : cardio
+Muscle ciblé : cardiovascular system
+Équipement : elliptical machine",
+Walking On Stepmill,cardiovascular system,cardio,stepmill machine,exercise_dataset,,,"Exercice : Walking On Stepmill
+Partie du corps : cardio
+Muscle ciblé : cardiovascular system
+Équipement : stepmill machine",
+Barbell Front Raise,delts,shoulders,barbell,exercise_dataset,,,"Exercice : Barbell Front Raise
+Partie du corps : shoulders
+Muscle ciblé : delts
+Équipement : barbell",
+Barbell One Arm Snatch,delts,shoulders,barbell,exercise_dataset,,,"Exercice : Barbell One Arm Snatch
+Partie du corps : shoulders
+Muscle ciblé : delts
+Équipement : barbell",
+Barbell Rear Delt Raise,delts,shoulders,barbell,exercise_dataset,,,"Exercice : Barbell Rear Delt Raise
+Partie du corps : shoulders
+Muscle ciblé : delts
+Équipement : barbell",
+Barbell Rear Delt Row,delts,shoulders,barbell,exercise_dataset,,,"Exercice : Barbell Rear Delt Row
+Partie du corps : shoulders
+Muscle ciblé : delts
+Équipement : barbell",
+Barbell Seated Behind Head Military Press,delts,shoulders,barbell,exercise_dataset,,,"Exercice : Barbell Seated Behind Head Military Press
+Partie du corps : shoulders
+Muscle ciblé : delts
+Équipement : barbell",
+Barbell Seated Bradford Rocky Press,delts,shoulders,barbell,exercise_dataset,,,"Exercice : Barbell Seated Bradford Rocky Press
+Partie du corps : shoulders
+Muscle ciblé : delts
+Équipement : barbell",
+Barbell Seated Overhead Press,delts,shoulders,barbell,exercise_dataset,,,"Exercice : Barbell Seated Overhead Press
+Partie du corps : shoulders
+Muscle ciblé : delts
+Équipement : barbell",
+Barbell Skier,delts,shoulders,barbell,exercise_dataset,,,"Exercice : Barbell Skier
+Partie du corps : shoulders
+Muscle ciblé : delts
+Équipement : barbell",
+Barbell Standing Bradford Press,delts,shoulders,barbell,exercise_dataset,,,"Exercice : Barbell Standing Bradford Press
+Partie du corps : shoulders
+Muscle ciblé : delts
+Équipement : barbell",
+Barbell Standing Front Raise Over Head,delts,shoulders,barbell,exercise_dataset,,,"Exercice : Barbell Standing Front Raise Over Head
+Partie du corps : shoulders
+Muscle ciblé : delts
+Équipement : barbell",
+Barbell Reverse Wrist Curl V. 2,forearms,lower arms,barbell,exercise_dataset,,,"Exercice : Barbell Reverse Wrist Curl V. 2
+Partie du corps : lower arms
+Muscle ciblé : forearms
+Équipement : barbell",
+Barbell Reverse Wrist Curl,forearms,lower arms,barbell,exercise_dataset,,,"Exercice : Barbell Reverse Wrist Curl
+Partie du corps : lower arms
+Muscle ciblé : forearms
+Équipement : barbell",
+Barbell Standing Back Wrist Curl,forearms,lower arms,barbell,exercise_dataset,,,"Exercice : Barbell Standing Back Wrist Curl
+Partie du corps : lower arms
+Muscle ciblé : forearms
+Équipement : barbell",
+Barbell Wrist Curl V. 2,forearms,lower arms,barbell,exercise_dataset,"Sit on a bench with your feet flat on the ground and your knees bent. | Hold a barbell with an underhand grip, palms facing up, and your hands shoulder-width apart. | Rest your forearms on your thighs, allowing your wrists to hang off the edge. | Slowly curl your wrists upward, bringing the barbell towards your forearms. | Pause for a moment at the top, then slowly lower the barbell back down to the starting position. | Repeat for the desired number of repetitions.","biceps, brachialis","Exercice : Barbell Wrist Curl V. 2
+    Parties du corps : lower arms
+    Muscles ciblés : forearms
+    Muscles secondaires : biceps, brachialis
+    Équipement : barbell
+    Instructions : Sit on a bench with your feet flat on the ground and your knees bent. | Hold a barbell with an underhand grip, palms facing up, and your hands shoulder-width apart. | Rest your forearms on your thighs, allowing your wrists to hang off the edge. | Slowly curl your wrists upward, bringing the barbell towards your forearms. | Pause for a moment at the top, then slowly lower the barbell back down to the starting position. | Repeat for the desired number of repetitions.",6kSxYnw.gif
+Barbell Wrist Curl,forearms,lower arms,barbell,exercise_dataset,,,"Exercice : Barbell Wrist Curl
+Partie du corps : lower arms
+Muscle ciblé : forearms
+Équipement : barbell",
+Cable Reverse Wrist Curl,forearms,lower arms,cable,exercise_dataset,,,"Exercice : Cable Reverse Wrist Curl
+Partie du corps : lower arms
+Muscle ciblé : forearms
+Équipement : cable",
+Cable Standing Back Wrist Curl,forearms,lower arms,cable,exercise_dataset,,,"Exercice : Cable Standing Back Wrist Curl
+Partie du corps : lower arms
+Muscle ciblé : forearms
+Équipement : cable",
+Cable Wrist Curl,forearms,lower arms,cable,exercise_dataset,,,"Exercice : Cable Wrist Curl
+Partie du corps : lower arms
+Muscle ciblé : forearms
+Équipement : cable",
+Dumbbell Lying Pronation,forearms,lower arms,dumbbell,exercise_dataset,,,"Exercice : Dumbbell Lying Pronation
+Partie du corps : lower arms
+Muscle ciblé : forearms
+Équipement : dumbbell",
+Dumbbell Lying Supination,forearms,lower arms,dumbbell,exercise_dataset,,,"Exercice : Dumbbell Lying Supination
+Partie du corps : lower arms
+Muscle ciblé : forearms
+Équipement : dumbbell",
+Barbell Clean-Grip Front Squat,glutes,upper legs,barbell,exercise_dataset,,,"Exercice : Barbell Clean-Grip Front Squat
+Partie du corps : upper legs
+Muscle ciblé : glutes
+Équipement : barbell",
+Barbell Deadlift,glutes,upper legs,barbell,exercise_dataset,,,"Exercice : Barbell Deadlift
+Partie du corps : upper legs
+Muscle ciblé : glutes
+Équipement : barbell",
+Barbell Front Chest Squat,glutes,upper legs,barbell,exercise_dataset,,,"Exercice : Barbell Front Chest Squat
+Partie du corps : upper legs
+Muscle ciblé : glutes
+Équipement : barbell",
+Barbell Front Squat,glutes,upper legs,barbell,exercise_dataset,,,"Exercice : Barbell Front Squat
+Partie du corps : upper legs
+Muscle ciblé : glutes
+Équipement : barbell",
+Barbell Full Squat,glutes,upper legs,barbell,exercise_dataset,,,"Exercice : Barbell Full Squat
+Partie du corps : upper legs
+Muscle ciblé : glutes
+Équipement : barbell",
+Barbell Hack Squat,glutes,upper legs,barbell,exercise_dataset,,,"Exercice : Barbell Hack Squat
+Partie du corps : upper legs
+Muscle ciblé : glutes
+Équipement : barbell",
+Barbell Jefferson Squat,glutes,upper legs,barbell,exercise_dataset,,,"Exercice : Barbell Jefferson Squat
+Partie du corps : upper legs
+Muscle ciblé : glutes
+Équipement : barbell",
+Barbell Jump Squat,glutes,upper legs,barbell,exercise_dataset,,,"Exercice : Barbell Jump Squat
+Partie du corps : upper legs
+Muscle ciblé : glutes
+Équipement : barbell",
+Barbell Lunge,glutes,upper legs,barbell,exercise_dataset,,,"Exercice : Barbell Lunge
+Partie du corps : upper legs
+Muscle ciblé : glutes
+Équipement : barbell",
+Barbell Lying Lifting (On Hip),glutes,upper legs,barbell,exercise_dataset,,,"Exercice : Barbell Lying Lifting (On Hip)
+Partie du corps : upper legs
+Muscle ciblé : glutes
+Équipement : barbell",
+Assisted Prone Hamstring,hamstrings,upper legs,assisted,exercise_dataset,,,"Exercice : Assisted Prone Hamstring
+Partie du corps : upper legs
+Muscle ciblé : hamstrings
+Équipement : assisted",
+Barbell Good Morning,hamstrings,upper legs,barbell,exercise_dataset,,,"Exercice : Barbell Good Morning
+Partie du corps : upper legs
+Muscle ciblé : hamstrings
+Équipement : barbell",
+Barbell Straight Leg Deadlift,hamstrings,upper legs,barbell,exercise_dataset,,,"Exercice : Barbell Straight Leg Deadlift
+Partie du corps : upper legs
+Muscle ciblé : hamstrings
+Équipement : barbell",
+Dumbbell Lying Femoral,hamstrings,upper legs,dumbbell,exercise_dataset,,,"Exercice : Dumbbell Lying Femoral
+Partie du corps : upper legs
+Muscle ciblé : hamstrings
+Équipement : dumbbell",
+Inverse Leg Curl (Bench Support),hamstrings,upper legs,body weight,exercise_dataset,,,"Exercice : Inverse Leg Curl (Bench Support)
+Partie du corps : upper legs
+Muscle ciblé : hamstrings
+Équipement : body weight",
+Kettlebell Hang Clean,hamstrings,upper legs,kettlebell,exercise_dataset,,,"Exercice : Kettlebell Hang Clean
+Partie du corps : upper legs
+Muscle ciblé : hamstrings
+Équipement : kettlebell",
+Kick Out Sit,hamstrings,upper legs,body weight,exercise_dataset,,,"Exercice : Kick Out Sit
+Partie du corps : upper legs
+Muscle ciblé : hamstrings
+Équipement : body weight",
+Lever Kneeling Leg Curl,hamstrings,upper legs,leverage machine,exercise_dataset,,,"Exercice : Lever Kneeling Leg Curl
+Partie du corps : upper legs
+Muscle ciblé : hamstrings
+Équipement : leverage machine",
+Lever Lying Leg Curl,hamstrings,upper legs,leverage machine,exercise_dataset,,,"Exercice : Lever Lying Leg Curl
+Partie du corps : upper legs
+Muscle ciblé : hamstrings
+Équipement : leverage machine",
+Lever Seated Leg Curl,hamstrings,upper legs,leverage machine,exercise_dataset,,,"Exercice : Lever Seated Leg Curl
+Partie du corps : upper legs
+Muscle ciblé : hamstrings
+Équipement : leverage machine",
+Alternate Lateral Pulldown,lats,back,cable,exercise_dataset,,,"Exercice : Alternate Lateral Pulldown
+Partie du corps : back
+Muscle ciblé : lats
+Équipement : cable",
+Assisted Parallel Close Grip Pull-Up,lats,back,leverage machine,exercise_dataset,,,"Exercice : Assisted Parallel Close Grip Pull-Up
+Partie du corps : back
+Muscle ciblé : lats
+Équipement : leverage machine",
+Assisted Pull-Up,lats,back,leverage machine,exercise_dataset,,,"Exercice : Assisted Pull-Up
+Partie du corps : back
+Muscle ciblé : lats
+Équipement : leverage machine",
+Barbell Pullover To Press,lats,back,barbell,exercise_dataset,,,"Exercice : Barbell Pullover To Press
+Partie du corps : back
+Muscle ciblé : lats
+Équipement : barbell",
+Barbell Decline Bent Arm Pullover,lats,back,barbell,exercise_dataset,,,"Exercice : Barbell Decline Bent Arm Pullover
+Partie du corps : back
+Muscle ciblé : lats
+Équipement : barbell",
+Barbell Decline Wide-Grip Pullover,lats,back,barbell,exercise_dataset,,,"Exercice : Barbell Decline Wide-Grip Pullover
+Partie du corps : back
+Muscle ciblé : lats
+Équipement : barbell",
+Barbell Pullover,lats,back,barbell,exercise_dataset,,,"Exercice : Barbell Pullover
+Partie du corps : back
+Muscle ciblé : lats
+Équipement : barbell",
+Cable Bar Lateral Pulldown,lats,back,cable,exercise_dataset,,,"Exercice : Cable Bar Lateral Pulldown
+Partie du corps : back
+Muscle ciblé : lats
+Équipement : cable",
+Cable Cross-Over Lateral Pulldown,lats,back,cable,exercise_dataset,,,"Exercice : Cable Cross-Over Lateral Pulldown
+Partie du corps : back
+Muscle ciblé : lats
+Équipement : cable",
+Cable Incline Pushdown,lats,back,cable,exercise_dataset,,,"Exercice : Cable Incline Pushdown
+Partie du corps : back
+Muscle ciblé : lats
+Équipement : cable",
+Side Push Neck Stretch,levator scapulae,neck,body weight,exercise_dataset,,,"Exercice : Side Push Neck Stretch
+Partie du corps : neck
+Muscle ciblé : levator scapulae
+Équipement : body weight",
+Neck Side Stretch,levator scapulae,neck,body weight,exercise_dataset,,,"Exercice : Neck Side Stretch
+Partie du corps : neck
+Muscle ciblé : levator scapulae
+Équipement : body weight",
+Assisted Chest Dip (Kneeling),pectorals,chest,leverage machine,exercise_dataset,,,"Exercice : Assisted Chest Dip (Kneeling)
+Partie du corps : chest
+Muscle ciblé : pectorals
+Équipement : leverage machine",
+Barbell Bench Press,pectorals,chest,barbell,exercise_dataset,,,"Exercice : Barbell Bench Press
+Partie du corps : chest
+Muscle ciblé : pectorals
+Équipement : barbell",
+Barbell Decline Bench Press,pectorals,chest,barbell,exercise_dataset,,,"Exercice : Barbell Decline Bench Press
+Partie du corps : chest
+Muscle ciblé : pectorals
+Équipement : barbell",
+Barbell Decline Wide-Grip Press,pectorals,chest,barbell,exercise_dataset,,,"Exercice : Barbell Decline Wide-Grip Press
+Partie du corps : chest
+Muscle ciblé : pectorals
+Équipement : barbell",
+Barbell Front Raise And Pullover,pectorals,chest,barbell,exercise_dataset,,,"Exercice : Barbell Front Raise And Pullover
+Partie du corps : chest
+Muscle ciblé : pectorals
+Équipement : barbell",
+Barbell Guillotine Bench Press,pectorals,chest,barbell,exercise_dataset,,,"Exercice : Barbell Guillotine Bench Press
+Partie du corps : chest
+Muscle ciblé : pectorals
+Équipement : barbell",
+Barbell Incline Bench Press,pectorals,chest,barbell,exercise_dataset,"Set up an incline bench at a 45-degree angle. | Lie down on the bench with your feet flat on the ground. | Grasp the barbell with an overhand grip, slightly wider than shoulder-width apart. | Unrack the barbell and lower it slowly towards your chest, keeping your elbows at a 45-degree angle. | Pause for a moment at the bottom, then push the barbell back up to the starting position. | Repeat for the desired number of repetitions.","shoulders, triceps","Exercice : Barbell Incline Bench Press
+    Parties du corps : chest
+    Muscles ciblés : pectorals
+    Muscles secondaires : shoulders, triceps
+    Équipement : barbell
+    Instructions : Set up an incline bench at a 45-degree angle. | Lie down on the bench with your feet flat on the ground. | Grasp the barbell with an overhand grip, slightly wider than shoulder-width apart. | Unrack the barbell and lower it slowly towards your chest, keeping your elbows at a 45-degree angle. | Pause for a moment at the bottom, then push the barbell back up to the starting position. | Repeat for the desired number of repetitions.",3TZduzM.gif
+Barbell Wide Bench Press,pectorals,chest,barbell,exercise_dataset,,,"Exercice : Barbell Wide Bench Press
+Partie du corps : chest
+Muscle ciblé : pectorals
+Équipement : barbell",
+Cable Bench Press,pectorals,chest,cable,exercise_dataset,,,"Exercice : Cable Bench Press
+Partie du corps : chest
+Muscle ciblé : pectorals
+Équipement : cable",
+Cable Cross-Over Variation,pectorals,chest,cable,exercise_dataset,,,"Exercice : Cable Cross-Over Variation
+Partie du corps : chest
+Muscle ciblé : pectorals
+Équipement : cable",
+Balance Board,quads,upper legs,body weight,exercise_dataset,,,"Exercice : Balance Board
+Partie du corps : upper legs
+Muscle ciblé : quads
+Équipement : body weight",
+Barbell Bench Front Squat,quads,upper legs,barbell,exercise_dataset,,,"Exercice : Barbell Bench Front Squat
+Partie du corps : upper legs
+Muscle ciblé : quads
+Équipement : barbell",
+Barbell Bench Squat,quads,upper legs,barbell,exercise_dataset,,,"Exercice : Barbell Bench Squat
+Partie du corps : upper legs
+Muscle ciblé : quads
+Équipement : barbell",
+Barbell Clean And Press,quads,upper legs,barbell,exercise_dataset,,,"Exercice : Barbell Clean And Press
+Partie du corps : upper legs
+Muscle ciblé : quads
+Équipement : barbell",
+Barbell One Leg Squat,quads,upper legs,barbell,exercise_dataset,,,"Exercice : Barbell One Leg Squat
+Partie du corps : upper legs
+Muscle ciblé : quads
+Équipement : barbell",
+Barbell Overhead Squat,quads,upper legs,barbell,exercise_dataset,,,"Exercice : Barbell Overhead Squat
+Partie du corps : upper legs
+Muscle ciblé : quads
+Équipement : barbell",
+Barbell Side Split Squat V. 2,quads,upper legs,barbell,exercise_dataset,,,"Exercice : Barbell Side Split Squat V. 2
+Partie du corps : upper legs
+Muscle ciblé : quads
+Équipement : barbell",
+Barbell Side Split Squat,quads,upper legs,barbell,exercise_dataset,,,"Exercice : Barbell Side Split Squat
+Partie du corps : upper legs
+Muscle ciblé : quads
+Équipement : barbell",
+Barbell Single Leg Split Squat,quads,upper legs,barbell,exercise_dataset,,,"Exercice : Barbell Single Leg Split Squat
+Partie du corps : upper legs
+Muscle ciblé : quads
+Équipement : barbell",
+Barbell Squat (On Knees),quads,upper legs,barbell,exercise_dataset,,,"Exercice : Barbell Squat (On Knees)
+Partie du corps : upper legs
+Muscle ciblé : quads
+Équipement : barbell",
+Barbell Incline Shoulder Raise,serratus anterior,chest,barbell,exercise_dataset,,,"Exercice : Barbell Incline Shoulder Raise
+Partie du corps : chest
+Muscle ciblé : serratus anterior
+Équipement : barbell",
+Dumbbell Incline Shoulder Raise,serratus anterior,chest,dumbbell,exercise_dataset,,,"Exercice : Dumbbell Incline Shoulder Raise
+Partie du corps : chest
+Muscle ciblé : serratus anterior
+Équipement : dumbbell",
+Smith Incline Shoulder Raises,serratus anterior,chest,smith machine,exercise_dataset,,,"Exercice : Smith Incline Shoulder Raises
+Partie du corps : chest
+Muscle ciblé : serratus anterior
+Équipement : smith machine",
+Incline Scapula Push Up,serratus anterior,chest,body weight,exercise_dataset,,,"Exercice : Incline Scapula Push Up
+Partie du corps : chest
+Muscle ciblé : serratus anterior
+Équipement : body weight",
+Scapula Push-Up,serratus anterior,chest,body weight,exercise_dataset,,,"Exercice : Scapula Push-Up
+Partie du corps : chest
+Muscle ciblé : serratus anterior
+Équipement : body weight",
+Hyperextension (On Bench),spine,back,body weight,exercise_dataset,,,"Exercice : Hyperextension (On Bench)
+Partie du corps : back
+Muscle ciblé : spine
+Équipement : body weight",
+Hyperextension,spine,back,body weight,exercise_dataset,,,"Exercice : Hyperextension
+Partie du corps : back
+Muscle ciblé : spine
+Équipement : body weight",
+Lever Back Extension,spine,back,leverage machine,exercise_dataset,,,"Exercice : Lever Back Extension
+Partie du corps : back
+Muscle ciblé : spine
+Équipement : leverage machine",
+Weighted Hyperextension (On Stability Ball),spine,back,weighted,exercise_dataset,"Position yourself face down on a stability ball with your hips resting on the ball and your feet against a wall for stability. | Place your hands behind your head or cross them over your chest. | Engage your core and slowly lift your upper body off the ball, extending your back until your body forms a straight line. | Pause for a moment at the top, then slowly lower your upper body back down to the starting position. | Repeat for the desired number of repetitions.","glutes, hamstrings","Exercice : Weighted Hyperextension (On Stability Ball)
+    Parties du corps : back
+    Muscles ciblés : spine
+    Muscles secondaires : glutes, hamstrings
+    Équipement : weighted
+    Instructions : Position yourself face down on a stability ball with your hips resting on the ball and your feet against a wall for stability. | Place your hands behind your head or cross them over your chest. | Engage your core and slowly lift your upper body off the ball, extending your back until your body forms a straight line. | Pause for a moment at the top, then slowly lower your upper body back down to the starting position. | Repeat for the desired number of repetitions.",8urJS9b.gif
+Band Straight Leg Deadlift,spine,back,band,exercise_dataset,,,"Exercice : Band Straight Leg Deadlift
+Partie du corps : back
+Muscle ciblé : spine
+Équipement : band",
+Back Extension On Exercise Ball,spine,back,stability ball,exercise_dataset,,,"Exercice : Back Extension On Exercise Ball
+Partie du corps : back
+Muscle ciblé : spine
+Équipement : stability ball",
+Exercise Ball Back Extension With Arms Extended,spine,back,stability ball,exercise_dataset,,,"Exercice : Exercise Ball Back Extension With Arms Extended
+Partie du corps : back
+Muscle ciblé : spine
+Équipement : stability ball",
+Exercise Ball Back Extension With Hands Behind Head,spine,back,stability ball,exercise_dataset,,,"Exercice : Exercise Ball Back Extension With Hands Behind Head
+Partie du corps : back
+Muscle ciblé : spine
+Équipement : stability ball",
+Exercise Ball Back Extension With Knees Off Ground,spine,back,stability ball,exercise_dataset,,,"Exercice : Exercise Ball Back Extension With Knees Off Ground
+Partie du corps : back
+Muscle ciblé : spine
+Équipement : stability ball",
+Exercise Ball Back Extension With Rotation,spine,back,stability ball,exercise_dataset,,,"Exercice : Exercise Ball Back Extension With Rotation
+Partie du corps : back
+Muscle ciblé : spine
+Équipement : stability ball",
+Barbell Shrug,traps,back,barbell,exercise_dataset,,,"Exercice : Barbell Shrug
+Partie du corps : back
+Muscle ciblé : traps
+Équipement : barbell",
+Cable Shrug,traps,back,cable,exercise_dataset,,,"Exercice : Cable Shrug
+Partie du corps : back
+Muscle ciblé : traps
+Équipement : cable",
+Dumbbell Decline Shrug V. 2,traps,back,dumbbell,exercise_dataset,,,"Exercice : Dumbbell Decline Shrug V. 2
+Partie du corps : back
+Muscle ciblé : traps
+Équipement : dumbbell",
+Dumbbell Decline Shrug,traps,back,dumbbell,exercise_dataset,,,"Exercice : Dumbbell Decline Shrug
+Partie du corps : back
+Muscle ciblé : traps
+Équipement : dumbbell",
+Dumbbell Incline Shrug,traps,back,dumbbell,exercise_dataset,,,"Exercice : Dumbbell Incline Shrug
+Partie du corps : back
+Muscle ciblé : traps
+Équipement : dumbbell",
+Dumbbell Shrug,traps,back,dumbbell,exercise_dataset,,,"Exercice : Dumbbell Shrug
+Partie du corps : back
+Muscle ciblé : traps
+Équipement : dumbbell",
+Kettlebell Sumo High Pull,traps,back,kettlebell,exercise_dataset,,,"Exercice : Kettlebell Sumo High Pull
+Partie du corps : back
+Muscle ciblé : traps
+Équipement : kettlebell",
+Lever Gripless Shrug,traps,back,leverage machine,exercise_dataset,,,"Exercice : Lever Gripless Shrug
+Partie du corps : back
+Muscle ciblé : traps
+Équipement : leverage machine",
+Lever Shrug,traps,back,leverage machine,exercise_dataset,,,"Exercice : Lever Shrug
+Partie du corps : back
+Muscle ciblé : traps
+Équipement : leverage machine",
+Scapular Pull-Up,traps,back,body weight,exercise_dataset,,,"Exercice : Scapular Pull-Up
+Partie du corps : back
+Muscle ciblé : traps
+Équipement : body weight",
+Assisted Standing Triceps Extension (With Towel),triceps,upper arms,assisted (towel),exercise_dataset,,,"Exercice : Assisted Standing Triceps Extension (With Towel)
+Partie du corps : upper arms
+Muscle ciblé : triceps
+Équipement : assisted (towel)",
+Assisted Triceps Dip (Kneeling),triceps,upper arms,leverage machine,exercise_dataset,,,"Exercice : Assisted Triceps Dip (Kneeling)
+Partie du corps : upper arms
+Muscle ciblé : triceps
+Équipement : leverage machine",
+Barbell Close-Grip Bench Press,triceps,upper arms,barbell,exercise_dataset,,,"Exercice : Barbell Close-Grip Bench Press
+Partie du corps : upper arms
+Muscle ciblé : triceps
+Équipement : barbell",
+Barbell Decline Close Grip To Skull Press,triceps,upper arms,barbell,exercise_dataset,,,"Exercice : Barbell Decline Close Grip To Skull Press
+Partie du corps : upper arms
+Muscle ciblé : triceps
+Équipement : barbell",
+Barbell Incline Reverse-Grip Press,triceps,upper arms,barbell,exercise_dataset,,,"Exercice : Barbell Incline Reverse-Grip Press
+Partie du corps : upper arms
+Muscle ciblé : triceps
+Équipement : barbell",
+Barbell Jm Bench Press,triceps,upper arms,barbell,exercise_dataset,,,"Exercice : Barbell Jm Bench Press
+Partie du corps : upper arms
+Muscle ciblé : triceps
+Équipement : barbell",
+Barbell Lying Close-Grip Press,triceps,upper arms,barbell,exercise_dataset,,,"Exercice : Barbell Lying Close-Grip Press
+Partie du corps : upper arms
+Muscle ciblé : triceps
+Équipement : barbell",
+Barbell Lying Close-Grip Triceps Extension,triceps,upper arms,barbell,exercise_dataset,,,"Exercice : Barbell Lying Close-Grip Triceps Extension
+Partie du corps : upper arms
+Muscle ciblé : triceps
+Équipement : barbell",
+Barbell Lying Extension,triceps,upper arms,barbell,exercise_dataset,,,"Exercice : Barbell Lying Extension
+Partie du corps : upper arms
+Muscle ciblé : triceps
+Équipement : barbell",
+Barbell Lying Triceps Extension Skull Crusher,triceps,upper arms,barbell,exercise_dataset,,,"Exercice : Barbell Lying Triceps Extension Skull Crusher
+Partie du corps : upper arms
+Muscle ciblé : triceps
+Équipement : barbell",
+Barbell Bent Over Row,upper back,back,barbell,exercise_dataset,,,"Exercice : Barbell Bent Over Row
+Partie du corps : back
+Muscle ciblé : upper back
+Équipement : barbell",
+Barbell Incline Row,upper back,back,barbell,exercise_dataset,,,"Exercice : Barbell Incline Row
+Partie du corps : back
+Muscle ciblé : upper back
+Équipement : barbell",
+Barbell One Arm Bent Over Row,upper back,back,barbell,exercise_dataset,,,"Exercice : Barbell One Arm Bent Over Row
+Partie du corps : back
+Muscle ciblé : upper back
+Équipement : barbell",
+Barbell Reverse Grip Bent Over Row,upper back,back,barbell,exercise_dataset,,,"Exercice : Barbell Reverse Grip Bent Over Row
+Partie du corps : back
+Muscle ciblé : upper back
+Équipement : barbell",
+Cable Decline Seated Wide-Grip Row,upper back,back,cable,exercise_dataset,,,"Exercice : Cable Decline Seated Wide-Grip Row
+Partie du corps : back
+Muscle ciblé : upper back
+Équipement : cable",
+Cable Floor Seated Wide-Grip Row,upper back,back,cable,exercise_dataset,,,"Exercice : Cable Floor Seated Wide-Grip Row
+Partie du corps : back
+Muscle ciblé : upper back
+Équipement : cable",
+Cable High Row (Kneeling),upper back,back,cable,exercise_dataset,,,"Exercice : Cable High Row (Kneeling)
+Partie du corps : back
+Muscle ciblé : upper back
+Équipement : cable",
+Cable Low Seated Row,upper back,back,cable,exercise_dataset,,,"Exercice : Cable Low Seated Row
+Partie du corps : back
+Muscle ciblé : upper back
+Équipement : cable",
+Cable One Arm Bent Over Row,upper back,back,cable,exercise_dataset,,,"Exercice : Cable One Arm Bent Over Row
+Partie du corps : back
+Muscle ciblé : upper back
+Équipement : cable",
+Cable One Arm Straight Back High Row (Kneeling),upper back,back,cable,exercise_dataset,,,"Exercice : Cable One Arm Straight Back High Row (Kneeling)
+Partie du corps : back
+Muscle ciblé : upper back
+Équipement : cable",
