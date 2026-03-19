@@ -7,8 +7,8 @@ The log format includes the timestamp, log level, and message. The log file is n
 
 def logging_setup():
     logging.basicConfig(
-        level=logging.DEBUG,
-        format='%(asctime)s - %(levelname)s - %(message)s',
+        level=logging.INFO,
+        format="%(asctime)s %(levelname)s %(name)s: %(message)s",
         handlers=[
             logging.FileHandler('app.log'),
             logging.StreamHandler()
@@ -16,6 +16,7 @@ def logging_setup():
     )
 
 
+
 if __name__ == "__main__":
     logging_setup()
-    logging.debug("Logging setup complete.")
+    logging.debug("Logging COACH IA")
