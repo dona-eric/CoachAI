@@ -17,9 +17,8 @@ logging_setup()
 logger = logging.getLogger(__name__)
 
 # Exercices : textes courts et denses → chunks petits
-CHUNK_SIZE=os.getenv('CHUNK_SIZE')
-CHUNK_OVERLAP =os.getenv('CHUNK_OVERLAP')
-CHUNK_SIZE=os.getenv("CHUNK_SIZE")
+CHUNK_SIZE=512
+CHUNK_OVERLAP=64
 
 
 def get_character_splitter() -> RecursiveCharacterTextSplitter:

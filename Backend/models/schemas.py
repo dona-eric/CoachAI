@@ -1,143 +1,59 @@
-# backend/models/schemas.py
+"""
+schemas de base pour les modèles de données utilisés dans l'application.
+"""
+
+from fastapi import HTTPException
 from pydantic import BaseModel, Field, validator
-from typing import Optional, List
-from datetime import date
+from typing import Optional, List, Any
 
 
-### PROFILE USER
+
+# classe pour le login et l'inscription des utilisateurs
+
+class UserForm(BaseModel):
+    """
+    schema de base pour les formulaires d'inscription et de connexion des utilisateurs.
+    """
+    firstname: str = Field(..., example="John Doe")
+    lastname: str = Field(..., example="Doe")
+    email: str = Field(..., example="john.doe@example.com")
+    password: str = Field(..., example="password123")
+
+
+class UserLoginForm(BaseModel):
+    """
+    schema de base pour les formulaires de connexion des utilisateurs.
+    """
+    email: str = Field(..., example="john.doe@example.com")
+    password: str = Field(..., example="password123")
+
 
 class UserProfile(BaseModel):
-    name:             str   = Field(..., description="Prénom utilisateur")
-    gender:           str   = Field(..., description="masculin | féminin")
-    age:              int   = Field(..., ge=10, le=100)
-    height:           float = Field(..., ge=100, le=250, description="Taille en cm")
-    current_weight:   float = Field(..., ge=30,  le=300, description="Poids actuel en kg")
-    target_weight:    float = Field(..., ge=30,  le=300, description="Poids objectif en kg")
-    level:            str   = Field(..., description="débutant | intermédiaire | avancé")
-    equipment:        str   = Field(..., description="Équipement disponible")
-    available_days:   int   = Field(..., ge=1, le=7,  description="Jours dispo/semaine")
-    restrictions:     Optional[str] = Field(None, description="Restrictions médicales")
-    preferred_time:   Optional[str] = Field("07:00", description="Heure préférée HH:MM")
+    """
+    schema de base pour les profils d'utilisateurs.
+    """
+    age: Optional[int] = Field(description="votre age user", example=30)
+    height: Optional[float] = Field(description="La taille en mètres", example=1.75)
+    weight: Optional[float] = Field(description="Le poids en kilogrammes", example=70.5)
+    activity_level: Optional[str] = Field(description="Le niveau d'activité physique", example="modéré")
+    goal: Optional[str] = Field(description="L'objectif de l'utilisateur", example="perdre du poids")
+    dietary_preferences: Optional[List[str]] = Field(description="Les préférences alimentaires de l'utilisateur", example=["végétarien", "sans gluten"])
 
-    @validator("gender")
-    def validate_gender(cls, v):
-        if v.lower() not in ["masculin", "féminin"]:
-            raise ValueError("gender doit être 'masculin' ou 'féminin'")
-        return v.lower()
 
-    @validator("level")
-    def validate_level(cls, v):
-        if v.lower() not in ["débutant", "intermédiaire", "avancé"]:
-            raise ValueError("level doit être débutant | intermédiaire | avancé")
-        return v.lower()
-
-    @validator("target_weight")
-    def validate_target_weight(cls, v, values):
-        if "current_weight" in values and v >= values["current_weight"]:
-            raise ValueError("target_weight doit être inférieur à current_weight")
-        return v
-
-class UserProfileResponse(BaseModel):
-    profile:              UserProfile
-    bmi:                  float
-    bmi_category:         str
-    weight_to_lose:       float
-    estimated_weeks:      int
-    session_duration_min: int
-    intensity_level:      str
-    priority_muscles:     List[str]
-    motivational_message: str
-
-# ─────────────────────────────────────────────────────
-# PLAN D'ENTRAÎNEMENT
-# ─────────────────────────────────────────────────────
 class PlanRequest(BaseModel):
-    profile:        UserProfile
-    start_date:     Optional[date] = Field(
-        default_factory=date.today,
-        description="Date de début du plan"
-    )
-
-class ExerciseItem(BaseModel):
-    name:        str
-    sets:        str
-    reps:        str
-    muscles:     str
-    equipment:   str
-    gif_url:     Optional[str] = None
-    instructions: Optional[str] = None
-
-class TrainingDay(BaseModel):
-    day_name:    str
-    focus:       str
-    exercises:   List[ExerciseItem]
-    duration_min: int
-
-class TrainingPlanResponse(BaseModel):
-    profile_summary:  str
-    estimated_weeks:  int
-    sessions_per_week: int
-    training_days:    List[TrainingDay]
-    general_advice:   List[str]
-    raw_plan:         str
-
-# ───────────────────────────────────────────────────── 
-class ExerciseSearchRequest(BaseModel):
-    query:      Optional[str]  = None
-    muscle:     Optional[str]  = None
-    equipment:  Optional[str]  = None
-    k:          int            = Field(default=6, ge=1, le=20)
-
-class ExerciseResult(BaseModel):
-    name:        str
-    muscles:     str
-    body_part:   str
-    equipment:   str
-    instructions: Optional[str] = None
-    gif_small:   Optional[str]  = None
-    gif_medium:  Optional[str]  = None
-    gif_large:   Optional[str]  = None
-    source:      str
-
-class ExerciseSearchResponse(BaseModel):
-    query:    str
-    total:    int
-    results:  List[ExerciseResult]
+    """
+    schema de base pour les requêtes de génération de plans d'entraînement personnalisés.
+    """
+    profile: UserProfile = Field(..., description="Le profil de l'utilisateur")
+    start_date: Optional[str] = Field(description="La date de début du plan d'entraînement", example="2024-01-01")
+    period: Optional[int] = Field(description="La durée du plan en semaines", example=4)
+    object_availbale: Optional[List[str]] = Field(description="Les équipements disponibles pour l'entraînement", example=["haltères", "tapis de yoga"])
+    time_available: Optional[int] = Field(description="Le temps disponible pour l'entraînement en minutes par jour", example=60)
 
 
-class CalendarRequest(BaseModel):
-    profile:        UserProfile
-    plan_summary:   str
-    start_date:     date
-    available_days: List[str] = Field(
-        description="Ex: ['Lundi', 'Mercredi', 'Vendredi']"
-    )
-    estimated_weeks:      int
-    session_duration_min: int = 60
-    preferred_time:       str = "07:00"
-
-class CalendarEvent(BaseModel):
-    title:            str
-    description:      str
-    date:             str
-    start_time:       str
-    end_time:         str
-    reminder_minutes: int = 30
-
-class CalendarResponse(BaseModel):
-    total_events:    int
-    duration_weeks:  int
-    events:          List[CalendarEvent]
-    calendar_link:   Optional[str] = None
-    message:         str
-
-
-class ChatMessage(BaseModel):
-    message:    str  = Field(..., description="Message de l'utilisateur")
-    session_id: str  = Field(default="default")
-    profile:    Optional[UserProfile] = None
-
-class ChatResponse(BaseModel):
-    response:    str
-    tools_used:  List[str]
-    session_id:  str
+class AgentPlan(BaseModel):
+    """
+    schema de base pour les plans d'entraînement générés par l'agent IA.
+    """
+    session_id: str = Field(..., description="L'identifiant de session pour le plan d'entraînement généré")
+    request_agent: Any = Field(..., description="Le plan d'entraînement généré par l'agent IA")

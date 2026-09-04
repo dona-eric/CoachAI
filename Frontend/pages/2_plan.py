@@ -66,7 +66,7 @@ if st.session_state.get("plan_result"):
             st.switch_page("pages/4_calendar.py")
     with col2:
         if st.button("🎥 Voir les exercices en détail", use_container_width=True):
-            st.switch_page("pages/3_exercises.py")
+            st.switch_page("pages/3_exercise.py")
 
 #  Chat avec CoachIA 
 st.divider()

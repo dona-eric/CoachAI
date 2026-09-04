@@ -12,7 +12,7 @@ from Backend.models.schemas import CalendarRequest, CalendarResponse, CalendarEv
 
 logger = logging.getLogger(__name__)
 
-SCOPES        = ["https://www.googleapis.com/auth/calendar"]
+SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
 # ─── OAuth2 Flow ──────────────────────────────────────
 def get_oauth_flow() -> Flow:

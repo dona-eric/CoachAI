@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 def analyze_profile(profile: UserProfile) -> UserProfileResponse:
     """Calcule les métriques du profil utilisateur."""
 
-    height_m       = profile.height / 100
+    height_m = profile.height / 100
     bmi            = round(profile.current_weight / (height_m ** 2), 1)
     weight_to_lose = round(profile.current_weight - profile.target_weight, 1)
     estimated_weeks = max(8, round(weight_to_lose / 0.5))

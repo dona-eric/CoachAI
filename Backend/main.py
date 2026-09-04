@@ -1,66 +1,42 @@
-# backend/main.py
+"""
+api/main.py — Application FastAPI principale
+
+Point d'entrée de l'API backend CoachIA.
+Gère CORS pour React, monte les routes, et initialise les services.
+"""
+
 import os
 import sys
 import logging
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from setup.loging import logging_setup
-from Backend.routers import profile, plan, exercises, calendars
-from Backend.services.agent_services import chat
-from Backend.models.schemas import ChatMessage, ChatResponse
+from setup.config import get_config
 
 load_dotenv()
 logging_setup()
 logger = logging.getLogger(__name__)
+config = get_config()
 
 # App FastAPI
 app = FastAPI(
     title="CoachIA API",
-    description="API de coaching sportif IA RAG + Groq + Qdrant",
+    description="""API backend pour CoachIA,
+                fournissant des endpoints pour la gestion de profils, 
+                plans d'entraînement, exercices, et calendriers. 
+                Intègre un agent de conversation intelligent pour des interactions personnalisées.
+            """,
     version="2.0.0"
     )
 
-#  CORS (Streamlit → FastAPI)
+# CORS pour React
 app.add_middleware(CORSMiddleware,
-                   allow_origins=["http://localhost:8501"],
+                   allow_origins=config.CORS_ORIGINS,
+                   allow_credentials=True,
                    allow_methods=["*"],
                    allow_headers=["*"]
                    )
-
-# Les Routers
-app.include_router(profile.router)
-app.include_router(plan.router)
-app.include_router(exercises.router)
-app.include_router(calendars.router)
-
-# Endpoint Chat
-
-@app.post("/chat", response_model=ChatResponse)
-async def chat_endpoint(message: ChatMessage):
-    """Endpoint principal de conversation avec CoachIA."""
-    profile_dict = message.profile.dict() if message.profile else None
-    result = chat(
-        session_id=message.session_id,
-        message=message.message,
-        user_profile=profile_dict,
-    )
-    return ChatResponse(
-        response=result["output"],
-        tools_used=result["tools_used"],
-        session_id=message.session_id,
-    )
-
-@app.get("/health")
-async def health():
-    return {"status": "ok", "service": "CoachIA API v2"}
-
-@app.get("/")
-async def root():
-    return {
-        "message": "🏋️ CoachIA API v2",
-        "docs":    "/docs",
-        "health":  "/health",
-    }
