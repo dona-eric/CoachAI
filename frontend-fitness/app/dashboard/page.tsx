@@ -96,7 +96,7 @@ export default function DashboardPage() {
       fetch('/api/user/profile').then(res => res.json())
     ]).then(([statsData, profileData]) => {
       // Vérifier si l'utilisateur a complété l'onboarding
-      if (profileData && !profileData.onboardingDone && !profileData.error) {
+      if (profileData?.error || !profileData?.onboardingDone) {
         router.push('/onboarding');
       } else {
         setStats(statsData);

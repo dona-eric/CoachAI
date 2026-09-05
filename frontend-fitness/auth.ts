@@ -25,13 +25,21 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           email: (credentials.email as string).toLowerCase().trim(),
         });
 
-        if (!user || !user.passwordHash) return null;
+        if (!user || !user.passwordHash) {
+          throw new Error("Identifiants incorrects.");
+        }
+
+        if (!user.emailVerified) {
+          throw new Error("Veuillez vérifier votre email avant de vous connecter.");
+        }
 
         const valid = await bcrypt.compare(
           credentials.password as string,
           user.passwordHash as string
         );
-        if (!valid) return null;
+        if (!valid) {
+          throw new Error("Identifiants incorrects.");
+        }
 
         return {
           id:    user._id.toString(),

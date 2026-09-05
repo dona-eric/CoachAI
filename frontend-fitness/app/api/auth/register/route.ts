@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 import { getDb } from "@/lib/mongodb";
+import { sendVerificationEmail } from "@/lib/mail";
 
 export async function POST(req: NextRequest) {
   try {
@@ -53,8 +55,22 @@ export async function POST(req: NextRequest) {
       updatedAt:       now,
     });
 
+    // Générer un token de vérification
+    const token = crypto.randomBytes(32).toString("hex");
+    const expires = new Date();
+    expires.setHours(expires.getHours() + 24); // Expire dans 24h
+
+    await db.collection("verificationTokens").insertOne({
+      identifier: email.toLowerCase().trim(),
+      token,
+      expires,
+    });
+
+    // Envoyer l'email
+    await sendVerificationEmail(email.toLowerCase().trim(), token);
+
     return NextResponse.json(
-      { message: "Compte créé avec succès.", userId: userResult.insertedId.toString() },
+      { message: "Compte créé avec succès. Vérifiez votre email.", userId: userResult.insertedId.toString() },
       { status: 201 }
     );
   } catch (error) {
