@@ -70,13 +70,13 @@ st.markdown(f'<div lang="fr"></div>', unsafe_allow_html=True)
 
 st.markdown("""
 <div class="card" lang="fr" style="text-align:center; margin-bottom:60px;">
-    <h1 style="color:#CC8A27;">Welcome on <b>CoachAI 🏋️</b></h1>
+    <h1 style="color:#CC8A27;">Welcome on <b>KINETIC 🏋️</b></h1>
 </div>
             
 <div style="text-align:center; margin-bottom:40px;">
     <h3 style="color:#CC8A27;">Prépare-toi à transformer ta vie !</h3>
     <h4 style="font-size:18px; color:#CC8A29;">
-        <b>CoachAI</b> est ton partenaire dédié pour le sport, la nutrition et la récupération.<br>
+        <b>KINETIC</b> est ton partenaire dédié pour le sport, la nutrition et la récupération.<br>
         Ensemble, on va atteindre tes objectifs ! 💪🚀
     </h4>
 </div>
@@ -301,7 +301,7 @@ with tab5:
 
 # =================="HISTORIQUE DES ÉCHANGES" ===================
 
-st.sidebar.title("CoachAI")
+st.sidebar.title("KINETIC")
 chat_ids = [f"Chat {i+1}: {h['user'][:20]}..." for i, h in enumerate(st.session_state.history)]
 
 selected = st.sidebar.radio("Conversations", ["Nouvelle conversation"] + chat_ids)
@@ -344,7 +344,7 @@ st.markdown(
     </style>
     <hr style="height:0px;border:none;color:#CC8A27;background-color:#CC8A27;" />
     <p style="text-align: center; color: #f0f0f0; font-size: 14px; margin-top: 10px;">🏋️ Crée par : <b>Eric KOULODJI</b> Version : <b>1.0</b>
-        <a href="https://github.com/dona-eric/CoachAI" target="_blank" style="color: #3BE466; text-decoration: none;">GitHub</a>
+        <a href="https://github.com/dona-eric/KINETIC" target="_blank" style="color: #3BE466; text-decoration: none;">GitHub</a>
     </p>
     """,
     unsafe_allow_html=True
