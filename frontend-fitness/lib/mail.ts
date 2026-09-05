@@ -10,10 +10,12 @@ export const transporter = nodemailer.createTransport({
   host: smtpHost,
   port: smtpPort,
   secure: smtpPort === 465,
-  auth: {
-    user: smtpUser,
-    pass: smtpPass,
-  },
+  ...(smtpUser && smtpPass ? {
+    auth: {
+      user: smtpUser,
+      pass: smtpPass,
+    }
+  } : {}),
 });
 
 export async function sendVerificationEmail(email: string, token: string) {
@@ -46,6 +48,13 @@ export async function sendVerificationEmail(email: string, token: string) {
       </div>
     </div>
   `;
+
+  if (!smtpUser || !smtpPass) {
+    console.warn("⚠️ SMTP_USER ou SMTP_PASSWORD manquant dans .env.local.");
+    console.warn("L'email n'a pas été envoyé. Voici le lien de vérification pour tester localement :");
+    console.info("➡️  " + verifyUrl);
+    return;
+  }
 
   try {
     await transporter.sendMail({

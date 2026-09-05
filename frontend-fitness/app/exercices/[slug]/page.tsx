@@ -3,8 +3,9 @@ import Link from 'next/link';
 import { getExerciseBySlug } from '@/lib/data/exercises';
 import { ChevronLeft, CheckCircle, AlertTriangle, Shuffle, Flame } from 'lucide-react';
 
-export default function ExerciceDetailPage({ params }: { params: { slug: string } }) {
-  const ex = getExerciseBySlug(params.slug);
+export default async function ExerciceDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await params;
+  const ex = getExerciseBySlug(resolvedParams.slug);
   if (!ex) return notFound();
 
   const levelLabel: Record<string, string> = { debutant: 'Débutant', intermediaire: 'Intermédiaire', avance: 'Avancé' };

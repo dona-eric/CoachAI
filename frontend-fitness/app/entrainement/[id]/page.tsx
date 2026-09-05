@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getPlanById } from '@/lib/data/plans';
@@ -7,8 +7,9 @@ import { ChevronLeft, Play, Pause, SkipForward, Check, X, Trophy, Flame, Clock }
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 
-export default function SessionPage({ params }: { params: { id: string } }) {
-  const plan = getPlanById(params.id);
+export default function SessionPage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = React.use(params);
+  const plan = getPlanById(resolvedParams.id);
   if (!plan) return notFound();
 
   const workDays = plan.weeklyPlan.filter(d => !d.isRest);

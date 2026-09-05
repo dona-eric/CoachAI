@@ -21,10 +21,10 @@ export const authConfig = {
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
-      const isPublic = ['/', '/auth/login', '/auth/register', '/auth/error'].some(
+      const isPublic = ['/', '/auth/login', '/auth/register', '/auth/verify', '/auth/error'].some(
         r => nextUrl.pathname === r || nextUrl.pathname.startsWith(r + '/')
       );
-      const isAuthRoute = ['/auth/login', '/auth/register'].some(
+      const isAuthRoute = ['/auth/login', '/auth/register', '/auth/verify'].some(
         r => nextUrl.pathname.startsWith(r)
       );
 
