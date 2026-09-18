@@ -10,21 +10,6 @@ const quickQuestions = [
   'Comment éviter le surentraînement ?',
 ];
 
-const sampleConvo = [
-  {
-    role: 'assistant',
-    content: 'Bonjour Éric ! 👋 Je suis votre coach IA. J\'ai analysé votre profil : 7 jours de streak, plan Home Warrior actif, objectif perte de poids. Comment puis-je vous aider aujourd\'hui ?'
-  },
-  {
-    role: 'user',
-    content: 'J\'ai du mal à faire plus de 10 pompes. Comment progresser ?'
-  },
-  {
-    role: 'assistant',
-    content: 'Excellente question ! Pour progresser en pompes, voici ma méthode : 1) **Grease the groove** — faites 5 séries de 5 pompes parfaites réparties dans la journée, tous les jours. 2) **Variantes** — essayez les pompes sur les genoux pour augmenter le volume. 3) **Tempo** — descendez en 3 secondes, montez en 1 seconde. Le contrôle = la force. En 3 semaines, vous devriez dépasser 15 reps !'
-  }
-];
-
 export default function CoachingPage() {
   return (
     <div>
@@ -61,53 +46,8 @@ export default function CoachingPage() {
 
             {/* Messages */}
             <div style={{ flex: 1, overflowY: 'auto', padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
-              {sampleConvo.map((msg, i) => (
-                <div key={i} style={{
-                  display: 'flex',
-                  justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start',
-                  gap: 10,
-                }}>
-                  {msg.role === 'assistant' && (
-                    <div style={{
-                      width: 32, height: 32, borderRadius: '50%', flexShrink: 0,
-                      background: 'linear-gradient(135deg, #065f46, #10b981)',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    }}>
-                      <Bot size={16} color="#000" />
-                    </div>
-                  )}
-                  <div style={{
-                    maxWidth: '80%',
-                    padding: '12px 16px',
-                    borderRadius: msg.role === 'user' ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
-                    background: msg.role === 'user' ? 'var(--primary)' : 'var(--bg-elevated)',
-                    color: msg.role === 'user' ? '#000' : 'var(--text-primary)',
-                    fontSize: '0.88rem',
-                    lineHeight: 1.6,
-                    border: msg.role === 'assistant' ? '1px solid var(--border)' : 'none',
-                  }}>
-                    {msg.content}
-                  </div>
-                </div>
-              ))}
-
-              {/* Typing indicator */}
-              <div style={{ display: 'flex', gap: 10 }}>
-                <div style={{
-                  width: 32, height: 32, borderRadius: '50%', flexShrink: 0,
-                  background: 'linear-gradient(135deg, #065f46, #10b981)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
-                  <Bot size={16} color="#000" />
-                </div>
-                <div style={{ padding: '12px 16px', background: 'var(--bg-elevated)', borderRadius: '16px 16px 16px 4px', border: '1px solid var(--border)', display: 'flex', gap: 4, alignItems: 'center' }}>
-                  {[0, 1, 2].map(i => (
-                    <div key={i} style={{
-                      width: 6, height: 6, borderRadius: '50%', background: 'var(--text-muted)',
-                      animation: `bounce 1.2s ease ${i * 0.2}s infinite`,
-                    }} />
-                  ))}
-                </div>
+              <div style={{ margin: 'auto', maxWidth: 420, textAlign: 'center', color: 'var(--text-muted)', lineHeight: 1.6 }}>
+                Le coaching sera disponible lorsque le service IA sera connecté à vos données réelles.
               </div>
             </div>
 
@@ -159,7 +99,7 @@ export default function CoachingPage() {
                 {[
                   ['Profil', 'Intermédiaire, 27 ans, 75kg'],
                   ['Objectif', '🔥 Perte de poids'],
-                  ['Plan actif', 'Home Warrior (sem. 3)'],
+                  ['Plan actif', 'Disponible après création de votre plan'],
                   ['Streak', '🔥 7 jours'],
                   ['Dernière séance', 'Hier · 45 min · 280 kcal'],
                 ].map(([l, v]) => (

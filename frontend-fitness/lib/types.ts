@@ -37,6 +37,9 @@ export interface TrainingPlanExercise {
   equipment: string[];
   imageUrl?: string;
   videoUrls?: string[];
+  sourceId?: number;
+  sourceUuid?: string;
+  videoIds?: number[];
 }
 
 export interface TrainingPlanDay {

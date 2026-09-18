@@ -1,14 +1,11 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { getExerciseBySlug } from '@/lib/data/exercises';
 import { getWgerExerciseBySlug } from '@/lib/wger';
 import { ChevronLeft, CheckCircle, AlertTriangle, Shuffle, Flame, Video } from 'lucide-react';
 
 export default async function ExerciceDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
-  const ex = /-\d+$/.test(resolvedParams.slug)
-    ? await getWgerExerciseBySlug(resolvedParams.slug)
-    : getExerciseBySlug(resolvedParams.slug);
+  const ex = await getWgerExerciseBySlug(resolvedParams.slug);
   if (!ex) return notFound();
 
   const levelLabel: Record<string, string> = { debutant: 'Débutant', intermediaire: 'Intermédiaire', avance: 'Avancé' };
@@ -105,16 +102,23 @@ export default async function ExerciceDetailPage({ params }: { params: Promise<{
               </p>}
             </div>
 
-            {ex.videoUrls && ex.videoUrls.length > 0 && (
+            {ex.videos && ex.videos.length > 0 && (
               <div className="card" style={{ padding: 24 }}>
                 <h2 style={{ fontWeight: 700, fontSize: '1rem', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
                   <Video size={16} color="var(--primary)" /> Vidéos de démonstration
                 </h2>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                  {ex.videoUrls.map(videoUrl => (
-                    <video key={videoUrl} controls preload="metadata" style={{ width: '100%', borderRadius: 10 }} src={videoUrl}>
-                      Votre navigateur ne prend pas en charge la vidéo.
-                    </video>
+                  {[...ex.videos].sort((a, b) => Number(Boolean(b.isMain)) - Number(Boolean(a.isMain))).map(video => (
+                    <div key={video.uuid ?? video.url}>
+                      <video controls preload="metadata" style={{ width: '100%', borderRadius: 10 }} src={video.url}>
+                        Votre navigateur ne prend pas en charge la vidéo.
+                      </video>
+                      {video.durationSeconds && (
+                        <small style={{ display: 'block', marginTop: 6, color: 'var(--text-secondary)' }}>
+                          {`${video.durationSeconds.toFixed(1)} s`}
+                        </small>
+                      )}
+                    </div>
                   ))}
                 </div>
               </div>

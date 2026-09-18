@@ -3,7 +3,6 @@ import { redirect } from 'next/navigation';
 import { Edit3, Target, Dumbbell, Award } from 'lucide-react';
 import { auth } from '@/auth';
 import { getDb } from '@/lib/mongodb';
-import { badges } from '@/lib/data/user'; // On garde les badges en local (catalogue)
 
 const goalLabel: Record<string, string> = {
   'perte-de-poids': '🔥 Perte de poids',
@@ -38,7 +37,6 @@ export default async function ProfilPage() {
   // Fetch records depuis MongoDB
   const personalRecords = await db.collection("personalRecords").find({ userId }).sort({ date: -1 }).toArray();
 
-  const unlockedBadges = badges.filter(b => b.unlocked); // TODO: Lier à la DB plus tard
 
   const weight = profile.weight as number ?? 0;
   const height = profile.height as number ?? 0;
@@ -144,7 +142,7 @@ export default async function ProfilPage() {
                   { label: 'Séances totales', value: totalSessions, color: 'var(--primary)' },
                   { label: 'Calories totales', value: `${totalCalories.toLocaleString('fr')} kcal`, color: '#ef4444' },
                   { label: 'Semaines actives', value: '--', color: 'var(--blue)' },
-                  { label: 'Badges débloqués', value: `${unlockedBadges.length}/${badges.length}`, color: 'var(--gold)' },
+                  { label: 'Badges débloqués', value: 'Bientôt disponible', color: 'var(--gold)' },
                 ].map(({ label, value, color }) => (
                   <div key={label} className="stat-card">
                     <div className="stat-label">{label}</div>
@@ -160,21 +158,9 @@ export default async function ProfilPage() {
                 <Award size={16} color="var(--gold)" /> Badges & Achievements
               </h2>
               <div className="grid-3" style={{ gap: 12 }}>
-                {badges.map(b => (
-                  <div
-                    key={b.id}
-                    style={{
-                      padding: '16px 12px', borderRadius: 12, textAlign: 'center',
-                      background: b.unlocked ? 'var(--gold-dim)' : 'var(--bg-elevated)',
-                      border: b.unlocked ? '1px solid rgba(245,158,11,0.25)' : '1px solid var(--border)',
-                      opacity: b.unlocked ? 1 : 0.5,
-                    }}
-                  >
-                    <div style={{ fontSize: '2rem', marginBottom: 6, filter: b.unlocked ? 'none' : 'grayscale(1)' }}>{b.emoji}</div>
-                    <div style={{ fontWeight: 700, fontSize: '0.78rem', marginBottom: 3, color: b.unlocked ? 'var(--gold)' : 'var(--text-muted)' }}>{b.name}</div>
-                    <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', lineHeight: 1.3 }}>{b.description}</div>
-                  </div>
-                ))}
+                <div className="card" style={{ padding: 16, color: 'var(--text-muted)' }}>
+                  Les badges seront débloqués à partir de vos séances réelles.
+                </div>
               </div>
             </div>
 

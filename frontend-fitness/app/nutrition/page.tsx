@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { Droplets, Plus, Minus, Search, Flame, Beef, Wheat, Droplet } from 'lucide-react';
-import { calculateTDEE, foods } from '@/lib/data/nutrition'; // On garde les aliments mockés comme base de données "recherche"
+import { calculateTDEE } from '@/lib/data/nutrition';
 import type { Food } from '@/lib/data/nutrition';
 
 function MacroDonut({ protein, carbs, fat }: { protein: number; carbs: number; fat: number }) {
@@ -53,7 +53,7 @@ function MacroDonut({ protein, carbs, fat }: { protein: number; carbs: number; f
 export default function NutritionPage() {
   const [profile, setProfile] = useState<any>(null);
   const [meals, setMeals] = useState<any[]>([]);
-  const [availableFoods, setAvailableFoods] = useState<Food[]>(foods.slice(0, 20));
+  const [availableFoods, setAvailableFoods] = useState<Food[]>([]);
   const [water, setWater] = useState(0);
   const [loading, setLoading] = useState(true);
   
@@ -64,7 +64,7 @@ export default function NutritionPage() {
   useEffect(() => {
     const query = search.trim();
     if (query.length < 2) {
-      setAvailableFoods(foods.slice(0, 20));
+      setAvailableFoods([]);
       return;
     }
 
@@ -150,11 +150,12 @@ export default function NutritionPage() {
   }
 
   // Calcul TDEE
-  const weight = profile?.weight || 70;
-  const height = profile?.height || 170;
-  const age = profile?.age || 30;
-  const targetCalories = calculateTDEE(weight, height, age, true, 1.55); // true = masculin pr le moment, simplifé
-  const targetProtein = Math.round(weight * 2);
+  const weight = Number(profile?.weight ?? 0);
+  const height = Number(profile?.height ?? 0);
+  const age = Number(profile?.age ?? 0);
+  const hasNutritionProfile = weight > 0 && height > 0 && age > 0;
+  const targetCalories = hasNutritionProfile ? calculateTDEE(weight, height, age, true, 1.55) : 0;
+  const targetProtein = hasNutritionProfile ? Math.round(weight * 2) : 0;
   const targetCarbs   = Math.round((targetCalories * 0.45) / 4);
   const targetFat     = Math.round((targetCalories * 0.25) / 9);
 
@@ -194,7 +195,7 @@ export default function NutritionPage() {
               <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>/ {targetCalories} kcal</span>
             </div>
             <div className="progress-track">
-              <div className="progress-fill" style={{ width: `${Math.min((totalToday.calories / targetCalories) * 100, 100)}%` }} />
+              <div className="progress-fill" style={{ width: `${targetCalories > 0 ? Math.min((totalToday.calories / targetCalories) * 100, 100) : 0}%` }} />
             </div>
             <div style={{ marginTop: 12, display: 'flex', gap: 16 }}>
               {[['Protéines', Math.round(totalToday.protein), targetProtein, 'g', '#10b981'],

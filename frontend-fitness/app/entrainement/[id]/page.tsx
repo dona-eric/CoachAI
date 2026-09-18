@@ -21,7 +21,7 @@ export default function SessionPage({ params }: { params: Promise<{ id: string }
   const [running, setRunning] = useState(false);
   
   // Tracking
-  const [weight, setWeight] = useState(70);
+  const [weight, setWeight] = useState(0);
   const [startTime, setStartTime] = useState<number | null>(null);
   const [sessionDuration, setSessionDuration] = useState(0);
   const [caloriesBurned, setCaloriesBurned] = useState(0);

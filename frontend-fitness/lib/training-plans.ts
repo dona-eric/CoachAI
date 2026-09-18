@@ -57,6 +57,11 @@ export function generateTrainingPlan(userId: string, profile: UserProfile, exerc
         equipment: exercise.equipmentNames,
         imageUrl: exercise.imageUrl,
         videoUrls: exercise.videoUrls,
+        sourceId: exercise.sourceId,
+        sourceUuid: exercise.uuid,
+        videoIds: (exercise.videos ?? [])
+          .map(video => video.id)
+          .filter((id): id is number => id !== undefined),
       }));
 
     return {
