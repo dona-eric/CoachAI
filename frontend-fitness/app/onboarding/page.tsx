@@ -91,7 +91,7 @@ export default function OnboardingPage() {
     // Dernière étape → sauvegarder
     setLoading(true);
     try {
-      await fetch('/api/user/profile', {
+      const response = await fetch('/api/user/profile', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -102,8 +102,13 @@ export default function OnboardingPage() {
           onboardingDone: true,
         }),
       });
+      if (!response.ok) {
+        const data = await response.json().catch(() => null);
+        throw new Error(data?.error ?? 'Impossible de sauvegarder votre profil.');
+      }
       router.push('/dashboard');
-    } catch {
+    } catch (error) {
+      console.error('[ONBOARDING] Profile save failed:', error);
       setLoading(false);
     }
   };

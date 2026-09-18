@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
   const session = await auth();
   if (!session?.user) return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
 
-  const userId = (session.user as any).id as string;
+  const userId = session.user.id;
   const { searchParams } = new URL(req.url);
   const date = searchParams.get("date") ?? new Date().toISOString().split("T")[0];
 
@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
   const session = await auth();
   if (!session?.user) return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
 
-  const userId = (session.user as any).id as string;
+  const userId = session.user.id;
   const body: Omit<MealEntry, "userId" | "createdAt"> = await req.json();
 
   if (!body.foodName || !body.meal || body.calories === undefined) {
@@ -60,13 +60,14 @@ export async function DELETE(req: NextRequest) {
   const session = await auth();
   if (!session?.user) return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
 
+  const userId = session.user.id;
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");
   if (!id) return NextResponse.json({ error: "ID requis" }, { status: 400 });
 
   const { ObjectId } = await import("mongodb");
   const db = await getDb();
-  await db.collection("mealEntries").deleteOne({ _id: new ObjectId(id) });
+  await db.collection("mealEntries").deleteOne({ _id: new ObjectId(id), userId });
 
   return NextResponse.json({ message: "Supprimé." });
 }

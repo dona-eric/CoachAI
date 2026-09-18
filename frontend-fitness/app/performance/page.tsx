@@ -66,18 +66,21 @@ export default async function PerformancePage() {
   const session = await auth();
   if (!session?.user) redirect('/auth/login');
 
-  const userId = (session.user as any).id;
+  const userId = session.user.id;
   const db = await getDb();
 
   // Fetch données
   const sessionHistory = await db.collection("workoutSessions").find({ userId }).sort({ date: -1 }).toArray();
   const personalRecords = await db.collection("personalRecords").find({ userId }).sort({ date: -1 }).toArray();
   
-  // Fake weight data initial pour la démo si vide
   let weightHistory = await db.collection("weightLogs").find({ userId }).sort({ date: 1 }).toArray();
   const profile = await db.collection("userProfiles").findOne({ userId });
-  if (weightHistory.length === 0 && profile?.weight) {
-    weightHistory = [{ date: profile.lastSessionDate || new Date().toISOString().split('T')[0], value: profile.weight, _id: 'fake' as any }];
+  const activePlan = await db.collection("trainingPlans").findOne({ userId, status: "active" });
+  const muscleProgress = new Map<string, number>();
+  for (const day of activePlan?.weeklyPlan ?? []) {
+    for (const exercise of day.exercises) {
+      for (const muscle of exercise.muscles) muscleProgress.set(muscle, (muscleProgress.get(muscle) ?? 0) + 1);
+    }
   }
 
   // Calculs stats
@@ -149,7 +152,7 @@ export default async function PerformancePage() {
           {/* Calories per session */}
           <div className="card" style={{ padding: 24 }}>
             <h2 style={{ fontWeight: 700, fontSize: '1rem', marginBottom: 16 }}>Calories brûlées (7 dernières séances)</h2>
-            <BarChart data={weeklyCalData.reverse()} />
+            <BarChart data={[...weeklyCalData].reverse()} />
           </div>
         </div>
 
@@ -170,12 +173,34 @@ export default async function PerformancePage() {
                     <div style={{ fontWeight: 600, fontSize: '0.88rem' }}>{pr.exerciseName}</div>
                     <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{pr.date}</div>
                   </div>
+
                   <span className="badge badge-gold">{pr.value}</span>
                 </div>
               )) : (
                 <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Aucun record pour le moment.</div>
               )}
             </div>
+          </div>
+
+          <div className="card" style={{ padding: 24 }}>
+            <h2 style={{ fontWeight: 700, fontSize: '1rem', marginBottom: 16 }}>Muscles ciblés par le plan</h2>
+            {muscleProgress.size > 0 ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {Array.from(muscleProgress.entries()).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([muscle, count]) => (
+                  <div key={muscle}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', marginBottom: 4 }}>
+                      <span style={{ textTransform: 'capitalize' }}>{muscle}</span>
+                      <span style={{ color: 'var(--text-muted)' }}>{count} exercices</span>
+                    </div>
+                    <div className="progress-track" style={{ height: 7 }}>
+                      <div className="progress-fill" style={{ width: `${Math.min((count / Math.max(...muscleProgress.values())) * 100, 100)}%` }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Aucun muscle associé au plan actif.</div>
+            )}
           </div>
 
           {/* Session history */}

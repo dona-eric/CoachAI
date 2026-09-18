@@ -1,5 +1,15 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Données fitness
+
+La bibliothèque d'exercices utilise l'API publique [Wger](https://wger.de/api/v2/).
+Les exercices, muscles, équipements, descriptions et images sont chargés côté serveur
+avec un cache d'une heure. Le catalogue local de `lib/data/exercises.ts` reste disponible
+comme fallback si l'API Wger est temporairement indisponible.
+
+Les données Wger sont publiées sous leurs licences respectives, principalement
+CC-BY-SA 4.0. L'attribution doit être conservée dans toute redistribution de ces données.
+
 ## Getting Started
 
 First, run the development server:

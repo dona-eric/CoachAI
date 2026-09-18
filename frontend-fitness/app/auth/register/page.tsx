@@ -4,7 +4,8 @@ import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { Zap, Mail, Lock, User, Eye, EyeOff, AlertCircle, CheckCircle, ArrowRight } from 'lucide-react';
+import { Mail, Lock, User, Eye, EyeOff, AlertCircle, CheckCircle, ArrowRight } from 'lucide-react';
+import KineticBrand from '@/components/brand/KineticBrand';
 
 const passwordStrength = (pwd: string): { score: number; label: string; color: string } => {
   let score = 0;
@@ -118,15 +119,7 @@ export default function RegisterPage() {
           transition={{ delay: 0.2 }}
           style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 60 }}
         >
-          <div style={{
-            width: 44, height: 44, borderRadius: 12,
-            background: 'linear-gradient(135deg, #065f46, #10b981)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 0 20px rgba(16,185,129,0.4)',
-          }}>
-            <Zap size={22} color="#000" fill="#000" />
-          </div>
-          <span style={{ fontWeight: 900, fontSize: '1.5rem', letterSpacing: '-0.03em' }}>KINETIC</span>
+          <KineticBrand size="lg" />
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
@@ -209,7 +202,7 @@ export default function RegisterPage() {
                   type={showPwd ? 'text' : 'password'} className="input"
                   style={{ paddingLeft: 38, paddingRight: 38 }}
                   placeholder="Minimum 8 caractères" value={password}
-                  onChange={e => setPassword(e.target.value)} required minLength={6}
+                  onChange={e => setPassword(e.target.value)} required minLength={8}
                 />
                 <button type="button" onClick={() => setShowPwd(p => !p)}
                   style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', padding: 0, display: 'flex' }}>

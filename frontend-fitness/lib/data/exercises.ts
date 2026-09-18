@@ -14,6 +14,15 @@ export interface Exercise {
   errors: string[];
   variants: string[];
   kcalPerMin: number;
+  source?: 'local' | 'wger';
+  sourceId?: number;
+  imageUrl?: string;
+  videoUrls?: string[];
+  aliases?: string[];
+  comments?: string[];
+  primaryMuscles?: string[];
+  secondaryMuscles?: string[];
+  equipmentNames?: string[];
 }
 
 export const exercises: Exercise[] = [

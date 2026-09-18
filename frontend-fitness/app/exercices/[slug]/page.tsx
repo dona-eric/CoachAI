@@ -1,11 +1,14 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getExerciseBySlug } from '@/lib/data/exercises';
-import { ChevronLeft, CheckCircle, AlertTriangle, Shuffle, Flame } from 'lucide-react';
+import { getWgerExerciseBySlug } from '@/lib/wger';
+import { ChevronLeft, CheckCircle, AlertTriangle, Shuffle, Flame, Video } from 'lucide-react';
 
 export default async function ExerciceDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
-  const ex = getExerciseBySlug(resolvedParams.slug);
+  const ex = /-\d+$/.test(resolvedParams.slug)
+    ? await getWgerExerciseBySlug(resolvedParams.slug)
+    : getExerciseBySlug(resolvedParams.slug);
   if (!ex) return notFound();
 
   const levelLabel: Record<string, string> = { debutant: 'Débutant', intermediaire: 'Intermédiaire', avance: 'Avancé' };
@@ -20,15 +23,18 @@ export default async function ExerciceDetailPage({ params }: { params: Promise<{
         </Link>
 
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: 20, flexWrap: 'wrap' }}>
-          {/* Big emoji */}
+          {/* Wger image or fallback icon */}
           <div style={{
             width: 80, height: 80, borderRadius: 20, flexShrink: 0,
             background: 'linear-gradient(135deg, var(--bg-elevated), var(--bg-card))',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontSize: '3rem',
             border: '1px solid var(--border)',
+            overflow: 'hidden',
           }}>
-            {ex.emoji}
+            {ex.imageUrl
+              ? <img src={ex.imageUrl} alt={ex.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              : ex.emoji}
           </div>
           <div>
             <div style={{ display: 'flex', gap: 8, marginBottom: 10, flexWrap: 'wrap' }}>
@@ -67,13 +73,19 @@ export default async function ExerciceDetailPage({ params }: { params: Promise<{
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: 20 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-            {/* Steps */}
+            {ex.imageUrl && (
+              <div className="card" style={{ padding: 12 }}>
+                <img src={ex.imageUrl} alt={`Illustration de ${ex.name}`} style={{ width: '100%', maxHeight: 360, objectFit: 'contain', borderRadius: 10 }} />
+              </div>
+            )}
+
+            {/* Instructions */}
             <div className="card" style={{ padding: 24 }}>
               <h2 style={{ fontWeight: 700, fontSize: '1rem', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
                 <span style={{ width: 24, height: 24, borderRadius: '50%', background: 'var(--primary-glow)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem', color: 'var(--primary)' }}>1</span>
                 Comment faire ?
               </h2>
-              <ol style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {ex.steps.length > 0 ? <ol style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 12 }}>
                 {ex.steps.map((step, i) => (
                   <li key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
                     <div style={{
@@ -88,11 +100,28 @@ export default async function ExerciceDetailPage({ params }: { params: Promise<{
                     <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.6 }}>{step}</span>
                   </li>
                 ))}
-              </ol>
+              </ol> : <p style={{ color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                Les instructions détaillées sont disponibles dans la description fournie par Wger.
+              </p>}
             </div>
 
+            {ex.videoUrls && ex.videoUrls.length > 0 && (
+              <div className="card" style={{ padding: 24 }}>
+                <h2 style={{ fontWeight: 700, fontSize: '1rem', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <Video size={16} color="var(--primary)" /> Vidéos de démonstration
+                </h2>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  {ex.videoUrls.map(videoUrl => (
+                    <video key={videoUrl} controls preload="metadata" style={{ width: '100%', borderRadius: 10 }} src={videoUrl}>
+                      Votre navigateur ne prend pas en charge la vidéo.
+                    </video>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Errors */}
-            <div className="card" style={{ padding: 24, borderColor: 'rgba(239,68,68,0.2)' }}>
+            {ex.errors.length > 0 && <div className="card" style={{ padding: 24, borderColor: 'rgba(239,68,68,0.2)' }}>
               <h2 style={{ fontWeight: 700, fontSize: '1rem', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
                 <AlertTriangle size={16} color="#ef4444" /> Erreurs fréquentes à éviter
               </h2>
@@ -104,7 +133,7 @@ export default async function ExerciceDetailPage({ params }: { params: Promise<{
                   </li>
                 ))}
               </ul>
-            </div>
+            </div>}
           </div>
 
           {/* Right: variants + CTA */}

@@ -1,8 +1,8 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Search, Filter, ChevronRight } from 'lucide-react';
-import { exercises, filterExercises } from '@/lib/data/exercises';
+import type { Exercise } from '@/lib/data/exercises';
 
 const equipmentOpts = [
   { value: 'all',         label: 'Tout équipement' },
@@ -42,16 +42,32 @@ const catColor: Record<string, string> = {
 };
 
 export default function ExercicesPage() {
+  const [availableExercises, setAvailableExercises] = useState<Exercise[]>([]);
+  const [source, setSource] = useState<'wger' | 'wger-cache'>('wger');
+  const [loading, setLoading] = useState(true);
   const [equipment, setEquipment] = useState('all');
   const [category, setCategory] = useState('all');
   const [level, setLevel] = useState('all');
   const [search, setSearch] = useState('');
 
-  const filtered = filterExercises(
-    equipment === 'all' ? undefined : equipment,
-    category === 'all' ? undefined : category,
-    level === 'all' ? undefined : level,
-  ).filter(e =>
+  useEffect(() => {
+    fetch('/api/exercises')
+      .then(response => response.json() as Promise<{ source: 'wger' | 'wger-cache'; exercises: Exercise[] }>)
+      .then(data => {
+        setAvailableExercises(data.exercises);
+        setSource(data.source);
+      })
+      .catch(error => console.error('[EXERCISES] Failed to load exercise catalogue:', error))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const filtered = availableExercises
+    .filter(exercise =>
+      (equipment === 'all' || exercise.equipment === equipment)
+      && (category === 'all' || exercise.category === category)
+      && (level === 'all' || exercise.level === level),
+    )
+    .filter(e =>
     !search || e.name.toLowerCase().includes(search.toLowerCase()) ||
     e.muscles.some(m => m.toLowerCase().includes(search.toLowerCase()))
   );
@@ -60,7 +76,9 @@ export default function ExercicesPage() {
     <div>
       <div className="page-header">
         <h1 className="page-title">📚 Bibliothèque d&apos;exercices</h1>
-        <p className="page-subtitle">{exercises.length} exercices · Filtrez par niveau, matériel et catégorie</p>
+        <p className="page-subtitle">
+          {availableExercises.length} exercices réels · Source : {source} · Filtrez par niveau, matériel et catégorie
+        </p>
       </div>
 
       <div className="page-body">
@@ -97,7 +115,11 @@ export default function ExercicesPage() {
         </div>
 
         {/* Grid */}
-        {filtered.length > 0 ? (
+        {loading ? (
+          <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--text-muted)' }}>
+            Chargement du catalogue Wger...
+          </div>
+        ) : filtered.length > 0 ? (
           <div className="grid-3" style={{ gap: 16 }}>
             {filtered.map(ex => (
               <Link key={ex.id} href={`/exercices/${ex.slug}`} style={{ textDecoration: 'none' }}>
@@ -107,7 +129,9 @@ export default function ExercicesPage() {
                     background: 'linear-gradient(135deg, var(--bg-elevated), var(--bg-card))',
                     flexDirection: 'column', gap: 4,
                   }}>
-                    <span style={{ fontSize: '2.5rem' }}>{ex.emoji}</span>
+                    {ex.imageUrl ? (
+                      <img src={ex.imageUrl} alt="" loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    ) : <span style={{ fontSize: '2.5rem' }}>{ex.emoji}</span>}
                     <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>~{ex.kcalPerMin} kcal/min</div>
                   </div>
                   {/* Body */}

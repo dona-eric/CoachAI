@@ -4,8 +4,9 @@ import { usePathname } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
 import {
   LayoutDashboard, Dumbbell, BookOpen, Apple,
-  TrendingUp, Heart, User, Zap, LogOut, MessageSquare
+  TrendingUp, Heart, User, LogOut, MessageSquare
 } from 'lucide-react';
+import KineticBrand from '@/components/brand/KineticBrand';
 
 const navItems = [
   { href: '/dashboard',    label: 'Tableau de bord', icon: LayoutDashboard },
@@ -45,20 +46,8 @@ export default function Sidebar() {
       {/* ── Logo ── */}
       <div style={{ padding: '22px 18px 18px', borderBottom: '1px solid var(--border)', flexShrink: 0 }}>
         <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{
-            width: 36, height: 36, borderRadius: 10,
-            background: 'linear-gradient(135deg, #065f46, #10b981)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 0 12px rgba(16,185,129,0.35)',
-            flexShrink: 0,
-          }}>
-            <Zap size={17} color="#000" fill="#000" />
-          </div>
           <div>
-            <div style={{
-              fontWeight: 900, fontSize: '1.05rem',
-              color: 'var(--text-primary)', letterSpacing: '-0.03em',
-            }}>KINETIC</div>
+            <KineticBrand size="md" />
             <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
               Fitness Platform
             </div>

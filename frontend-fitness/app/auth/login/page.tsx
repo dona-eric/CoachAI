@@ -4,7 +4,8 @@ import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { Zap, Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight } from 'lucide-react';
+import KineticBrand from '@/components/brand/KineticBrand';
 
 export default function LoginPage() {
   const router       = useRouter();
@@ -88,15 +89,7 @@ export default function LoginPage() {
           transition={{ delay: 0.2, duration: 0.5 }}
           style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 60 }}
         >
-          <div style={{
-            width: 44, height: 44, borderRadius: 12,
-            background: 'linear-gradient(135deg, #065f46, #10b981)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 0 20px rgba(16,185,129,0.4)',
-          }}>
-            <Zap size={22} color="#000" fill="#000" />
-          </div>
-          <span style={{ fontWeight: 900, fontSize: '1.5rem', letterSpacing: '-0.03em' }}>KINETIC</span>
+          <KineticBrand size="lg" />
         </motion.div>
 
         <motion.div
@@ -162,6 +155,9 @@ export default function LoginPage() {
               Créer un compte
             </Link>
           </p>
+          <Link href="/auth/forgot-password" style={{ display: 'inline-block', color: 'var(--primary)', fontSize: '0.82rem', marginBottom: 18 }}>
+            Mot de passe oublié ?
+          </Link>
 
           {/* Error */}
           {error && (
@@ -223,15 +219,6 @@ export default function LoginPage() {
                   {showPwd ? <EyeOff size={15} /> : <Eye size={15} />}
                 </button>
               </div>
-            </div>
-
-            {/* Demo hint */}
-            <div style={{
-              padding: '10px 14px', background: 'rgba(16,185,129,0.08)',
-              border: '1px solid rgba(16,185,129,0.2)', borderRadius: 8,
-              fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: 1.5,
-            }}>
-              💡 <strong>Compte démo :</strong> eric@kinetic.fr · kinetic123
             </div>
 
             {/* Submit */}

@@ -21,7 +21,7 @@ export default async function ProfilPage() {
   const session = await auth();
   if (!session?.user) redirect('/auth/login');
 
-  const userId = (session.user as any).id;
+  const userId = session.user.id;
   const db = await getDb();
 
   // Fetch du profil

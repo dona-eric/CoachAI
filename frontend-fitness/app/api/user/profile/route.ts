@@ -8,7 +8,7 @@ export async function GET() {
   const session = await auth();
   if (!session?.user) return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
 
-  const userId = (session.user as any).id as string;
+  const userId = session.user.id;
   const db = await getDb();
 
   const profile = await db.collection("userProfiles").findOne({ userId });
@@ -26,18 +26,29 @@ export async function PATCH(req: NextRequest) {
   const session = await auth();
   if (!session?.user) return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
 
-  const userId = (session.user as any).id as string;
+  const userId = session.user.id;
   const body: Partial<UserProfile> = await req.json();
+
+  if (body.age !== undefined && (!Number.isInteger(body.age) || body.age < 13 || body.age > 100)) {
+    return NextResponse.json({ error: "Âge invalide." }, { status: 400 });
+  }
+  if (body.height !== undefined && (!Number.isFinite(body.height) || body.height < 100 || body.height > 250)) {
+    return NextResponse.json({ error: "Taille invalide." }, { status: 400 });
+  }
+  if (body.weight !== undefined && (!Number.isFinite(body.weight) || body.weight < 25 || body.weight > 400)) {
+    return NextResponse.json({ error: "Poids invalide." }, { status: 400 });
+  }
 
   // Champs autorisés à mettre à jour
   const allowed: (keyof UserProfile)[] = [
     "age", "height", "weight", "level", "goal",
     "equipment", "activePlanId", "onboardingDone",
   ];
-  const update: Partial<UserProfile> = {};
-  for (const key of allowed) {
-    if (body[key] !== undefined) (update as any)[key] = body[key];
-  }
+  const update = Object.fromEntries(
+    allowed
+      .filter(key => body[key] !== undefined)
+      .map(key => [key, body[key]]),
+  ) as Partial<UserProfile>;
   update.updatedAt = new Date();
 
   const db = await getDb();

@@ -3,8 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
-import Sidebar from "@/components/layout/Sidebar";
-import BottomNav from "@/components/layout/BottomNav";
+import AppShell from "@/components/layout/AppShell";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -26,13 +25,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="fr" className={inter.variable}>
       <body>
         <SessionProvider session={session}>
-          <div className="app-shell">
-            <Sidebar />
-            <main className="main-content">
-              {children}
-            </main>
-            <BottomNav />
-          </div>
+          <AppShell>{children}</AppShell>
         </SessionProvider>
       </body>
     </html>

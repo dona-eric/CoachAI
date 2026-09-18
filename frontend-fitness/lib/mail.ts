@@ -65,6 +65,23 @@ export async function sendVerificationEmail(email: string, token: string) {
     });
   } catch (error) {
     console.error("Erreur lors de l'envoi de l'email de vérification :", error);
-    // On ne lève pas l'erreur pour ne pas bloquer l'API, mais en production il faudrait la gérer
+    throw new Error("EMAIL_DELIVERY_FAILED", { cause: error });
   }
+}
+
+export async function sendPasswordResetEmail(email: string, token: string) {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const resetUrl = `${baseUrl}/auth/reset-password?token=${encodeURIComponent(token)}&email=${encodeURIComponent(email)}`;
+
+  if (!smtpUser || !smtpPass) {
+    console.warn("SMTP_USER ou SMTP_PASSWORD manquant : email de réinitialisation non envoyé.");
+    return;
+  }
+
+  await transporter.sendMail({
+    from: smtpFrom,
+    to: email,
+    subject: "Réinitialisez votre mot de passe KINETIC",
+    html: `<p>Réinitialisez votre mot de passe KINETIC en cliquant ici :</p><p><a href="${resetUrl}">${resetUrl}</a></p><p>Ce lien expire dans une heure.</p>`,
+  });
 }

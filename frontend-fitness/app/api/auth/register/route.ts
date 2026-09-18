@@ -12,8 +12,8 @@ export async function POST(req: NextRequest) {
     if (!name?.trim() || !email?.trim() || !password) {
       return NextResponse.json({ error: "Tous les champs sont requis." }, { status: 400 });
     }
-    if (password.length < 6) {
-      return NextResponse.json({ error: "Le mot de passe doit faire au moins 6 caractères." }, { status: 400 });
+    if (password.length < 8 || !/[A-Za-z]/.test(password) || !/[0-9]/.test(password)) {
+      return NextResponse.json({ error: "Le mot de passe doit contenir au moins 8 caractères, une lettre et un chiffre." }, { status: 400 });
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {

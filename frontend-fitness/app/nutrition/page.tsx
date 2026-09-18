@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Droplets, Plus, Minus, Search, Flame, Beef, Wheat, Droplet } from 'lucide-react';
 import { calculateTDEE, foods } from '@/lib/data/nutrition'; // On garde les aliments mockés comme base de données "recherche"
+import type { Food } from '@/lib/data/nutrition';
 
 function MacroDonut({ protein, carbs, fat }: { protein: number; carbs: number; fat: number }) {
   const total = protein * 4 + carbs * 4 + fat * 9;
@@ -52,12 +53,30 @@ function MacroDonut({ protein, carbs, fat }: { protein: number; carbs: number; f
 export default function NutritionPage() {
   const [profile, setProfile] = useState<any>(null);
   const [meals, setMeals] = useState<any[]>([]);
+  const [availableFoods, setAvailableFoods] = useState<Food[]>(foods.slice(0, 20));
   const [water, setWater] = useState(0);
   const [loading, setLoading] = useState(true);
   
   const [activeTab, setActiveTab] = useState<'matin' | 'midi' | 'soir' | 'collation'>('midi');
   const [search, setSearch] = useState('');
   const [isAdding, setIsAdding] = useState<string | null>(null);
+
+  useEffect(() => {
+    const query = search.trim();
+    if (query.length < 2) {
+      setAvailableFoods(foods.slice(0, 20));
+      return;
+    }
+
+    const timeout = window.setTimeout(() => {
+      fetch(`/api/nutrition/foods?search=${encodeURIComponent(query)}`)
+        .then(response => response.json() as Promise<{ foods: Food[] }>)
+        .then(data => setAvailableFoods(data.foods))
+        .catch(error => console.error('[NUTRITION] Failed to search foods:', error));
+    }, 250);
+
+    return () => window.clearTimeout(timeout);
+  }, [search]);
 
   const fetchNutrition = async () => {
     try {
@@ -151,7 +170,7 @@ export default function NutritionPage() {
   const mealsByType = (type: typeof activeTab) => meals.filter(m => m.meal === type);
   const waterPct = Math.min((water / waterGoal) * 100, 100);
 
-  const filteredFoods = foods.filter(f =>
+  const filteredFoods = availableFoods.filter(f =>
     f.name.toLowerCase().includes(search.toLowerCase())
   ).slice(0, 6);
 

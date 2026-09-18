@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { Flame, Dumbbell, Calendar, TrendingUp, Apple, Target, ChevronRight, Zap, BookOpen } from 'lucide-react';
-import { trainingPlans } from '@/lib/data/plans'; // On garde les plans en local pour l'instant, c'est du catalogue
+import type { UserTrainingPlan } from '@/lib/types';
 
 const fadeUp = (delay = 0) => ({
   initial:  { opacity: 0, y: 20 },
@@ -88,19 +88,22 @@ export default function DashboardPage() {
 
   const [stats, setStats] = useState<any>(null);
   const [profile, setProfile] = useState<any>(null);
+  const [plans, setPlans] = useState<UserTrainingPlan[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     Promise.all([
       fetch('/api/workouts/stats').then(res => res.json()),
-      fetch('/api/user/profile').then(res => res.json())
-    ]).then(([statsData, profileData]) => {
+      fetch('/api/user/profile').then(res => res.json()),
+      fetch('/api/training-plans').then(res => res.json() as Promise<UserTrainingPlan[]>)
+    ]).then(([statsData, profileData, plansData]) => {
       // Vérifier si l'utilisateur a complété l'onboarding
       if (profileData?.error || !profileData?.onboardingDone) {
         router.push('/onboarding');
       } else {
         setStats(statsData);
         setProfile(profileData);
+        setPlans(plansData);
         setLoading(false);
       }
     }).catch(err => {
@@ -123,8 +126,9 @@ export default function DashboardPage() {
   }
 
   const userName   = session?.user?.name?.split(' ')[0] ?? profile?.name?.split(' ')[0] ?? 'Athlète';
-  const activePlan = trainingPlans.find(p => p.id === profile?.activePlanId) ?? trainingPlans[0];
-  const todayDay   = activePlan?.weeklyPlan.find(d => !d.isRest);
+  const activePlan = plans.find(p => p.id === profile?.activePlanId) ?? plans[0];
+  const todayIndex = (new Date().getDay() + 6) % 7;
+  const todayDay   = activePlan?.weeklyPlan[todayIndex] ?? activePlan?.weeklyPlan.find(d => !d.isRest);
   
   const lastSession = stats?.recentSessions?.[0] ?? null;
   const sessionHistory = stats?.recentSessions ?? [];
@@ -163,7 +167,7 @@ export default function DashboardPage() {
             { label: 'Séances totales',        value: stats?.totalSessions ?? 0, unit: '',       icon: Dumbbell,    color: 'var(--primary)', trend: 'depuis l\'inscription' },
             { label: 'Calories (semaine)',      value: stats?.weekCalories ?? 0,  unit: 'kcal',  icon: Flame,       color: '#ef4444',        trend: 'cette semaine' },
             { label: 'Séances / semaine',       value: activePlan?.sessionsPerWeek ?? 0, unit: '',  icon: Calendar, color: 'var(--blue)',    trend: activePlan?.name ?? '' },
-            { label: 'Poids perdu',             value: '0',                       unit: 'kg',    icon: TrendingUp,  color: 'var(--gold)',     trend: 'depuis début' },
+            { label: 'Évolution poids',         value: (stats?.weightDelta ?? 0).toFixed(1), unit: 'kg', icon: TrendingUp, color: 'var(--gold)', trend: 'depuis le début' },
           ].map(({ label, value, unit, icon: Icon, color, trend }, i) => (
             <motion.div key={label} {...fadeUp(0.05 + i * 0.06)} className="stat-card card-glow">
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
@@ -200,7 +204,7 @@ export default function DashboardPage() {
               <div>
                 <span className="badge badge-blue" style={{ marginBottom: 16, display: 'inline-flex' }}>{todayDay.focus}</span>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  {todayDay.exercises.map((ex: any, i: number) => (
+                  {todayDay.exercises.map((ex, i) => (
                     <motion.div
                       key={i}
                       initial={{ opacity: 0, x: -16 }}
@@ -242,7 +246,7 @@ export default function DashboardPage() {
               <div style={{ display: 'flex', justifyContent: 'space-around' }}>
                 <ActivityRing value={lastSession?.calories ?? 0} max={400}  color="#ef4444"        label="Calories" />
                 <ActivityRing value={lastSession?.exercisesDone ?? 0} max={6} color="var(--primary)" label="Exercices" />
-                <ActivityRing value={1800} max={2500} color="var(--blue)" label="Eau (ml)" />
+                <ActivityRing value={stats?.waterToday ?? 0} max={2500} color="var(--blue)" label="Eau (ml)" />
               </div>
             </motion.div>
 

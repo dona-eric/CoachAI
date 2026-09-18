@@ -26,6 +26,45 @@ export interface UserProfile {
   updatedAt: Date;
 }
 
+export interface TrainingPlanExercise {
+  exerciseId: string;
+  exerciseName: string;
+  emoji: string;
+  sets: number;
+  reps: string;
+  rest: number;
+  muscles: string[];
+  equipment: string[];
+  imageUrl?: string;
+  videoUrls?: string[];
+}
+
+export interface TrainingPlanDay {
+  day: number;
+  label: string;
+  isRest: boolean;
+  focus?: string;
+  exercises: TrainingPlanExercise[];
+}
+
+export interface UserTrainingPlan {
+  _id?: string;
+  id: string;
+  userId: string;
+  name: string;
+  description: string;
+  level: UserProfile["level"];
+  equipment: string[];
+  goal: UserProfile["goal"];
+  duration: number;
+  sessionsPerWeek: number;
+  weeklyPlan: TrainingPlanDay[];
+  source: "wger";
+  status: "active" | "archived";
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface WorkoutSession {
   _id?: string;
   userId: string;
@@ -38,7 +77,17 @@ export interface WorkoutSession {
   totalSets: number;
   mood: 1 | 2 | 3 | 4 | 5;
   notes?: string;
+  exerciseResults?: ExerciseResult[];
   createdAt: Date;
+}
+
+export interface ExerciseResult {
+  exerciseId: string;
+  exerciseName: string;
+  setsCompleted: number;
+  repsCompleted?: number;
+  durationSeconds?: number;
+  weightUsed?: number;
 }
 
 export interface PersonalRecord {
@@ -82,4 +131,14 @@ export interface WeightLog {
   date: string;
   weight: number;           // kg
   createdAt: Date;
+}
+
+export interface ProgressStat {
+  id: string;
+  name: string;
+  sessions: number;
+  totalSets: number;
+  latestSets: number;
+  deltaSets: number;
+  muscles: string[];
 }

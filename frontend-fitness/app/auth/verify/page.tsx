@@ -13,6 +13,7 @@ export default function VerifyEmailPage() {
 
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
   const [message, setMessage] = useState('Vérification en cours...');
+  const [resending, setResending] = useState(false);
 
   useEffect(() => {
     if (!token || !email) {
@@ -46,6 +47,18 @@ export default function VerifyEmailPage() {
     verify();
   }, [token, email]);
 
+  const resend = async () => {
+    if (!email) return;
+    setResending(true);
+    await fetch('/api/auth/resend-verification', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+    setResending(false);
+    setMessage('Si votre compte est encore en attente, un nouvel email vient d’être envoyé.');
+  };
+
   return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
       <motion.div 
@@ -73,9 +86,16 @@ export default function VerifyEmailPage() {
         </p>
 
         {status !== 'loading' && (
-          <Link href="/auth/login" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
-            Aller à la connexion
-          </Link>
+          <>
+            {status === 'error' && email && (
+              <button onClick={resend} className="btn btn-ghost" disabled={resending} style={{ width: '100%', justifyContent: 'center', marginBottom: 10 }}>
+                {resending ? 'Envoi...' : 'Renvoyer l’email'}
+              </button>
+            )}
+            <Link href="/auth/login" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
+              Aller à la connexion
+            </Link>
+          </>
         )}
       </motion.div>
       <style>{`

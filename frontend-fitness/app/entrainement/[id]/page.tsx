@@ -1,18 +1,16 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { getPlanById } from '@/lib/data/plans';
-import { ChevronLeft, Play, Pause, SkipForward, Check, X, Trophy, Flame, Clock } from 'lucide-react';
+import { ChevronLeft, Play, SkipForward, Check, X, Trophy, Flame, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
+import type { UserTrainingPlan } from '@/lib/types';
 
 export default function SessionPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = React.use(params);
-  const plan = getPlanById(resolvedParams.id);
-  if (!plan) return notFound();
-
-  const workDays = plan.weeklyPlan.filter(d => !d.isRest);
+  const [plan, setPlan] = useState<UserTrainingPlan | null>(null);
+  const [loading, setLoading] = useState(true);
+  const workDays = plan?.weeklyPlan.filter(d => !d.isRest) ?? [];
   const allExercises = workDays[0]?.exercises ?? [];
 
   const [phase, setPhase] = useState<'overview' | 'session' | 'done'>('overview');
@@ -27,8 +25,22 @@ export default function SessionPage({ params }: { params: Promise<{ id: string }
   const [startTime, setStartTime] = useState<number | null>(null);
   const [sessionDuration, setSessionDuration] = useState(0);
   const [caloriesBurned, setCaloriesBurned] = useState(0);
+  const [repsCompleted, setRepsCompleted] = useState('');
+  const [weightUsed, setWeightUsed] = useState('');
+  const [exerciseResults, setExerciseResults] = useState<Record<string, { repsCompleted?: number; weightUsed?: number }>>({});
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    fetch(`/api/training-plans/${resolvedParams.id}`)
+      .then(response => {
+        if (!response.ok) throw new Error('Plan introuvable');
+        return response.json() as Promise<UserTrainingPlan>;
+      })
+      .then(setPlan)
+      .catch(error => console.error('[WORKOUT] Failed to load plan:', error))
+      .finally(() => setLoading(false));
+  }, [resolvedParams.id]);
 
   const currentEx = allExercises[exIndex];
   const totalSets = currentEx?.sets ?? 0;
@@ -54,8 +66,16 @@ export default function SessionPage({ params }: { params: Promise<{ id: string }
     return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
   }, [running]);
 
+  if (loading) {
+    return <div style={{ padding: 40, color: 'var(--text-secondary)' }}>Chargement de votre séance...</div>;
+  }
+  if (!plan) {
+    return <div style={{ padding: 40, color: 'var(--text-secondary)' }}>Plan introuvable.</div>;
+  }
+
   const triggerConfetti = () => {
     const duration = 3000;
+    // eslint-disable-next-line react-hooks/purity
     const end = Date.now() + duration;
 
     const frame = () => {
@@ -72,10 +92,22 @@ export default function SessionPage({ params }: { params: Promise<{ id: string }
   };
 
   const handleSetDone = () => {
+    if (currentEx) {
+      const reps = Number.parseInt(repsCompleted, 10);
+      const usedWeight = Number.parseFloat(weightUsed);
+      setExerciseResults(previous => ({
+        ...previous,
+        [currentEx.exerciseId]: {
+          repsCompleted: Number.isFinite(reps) && reps > 0 ? reps : previous[currentEx.exerciseId]?.repsCompleted,
+          weightUsed: Number.isFinite(usedWeight) && usedWeight >= 0 ? usedWeight : previous[currentEx.exerciseId]?.weightUsed,
+        },
+      }));
+    }
     const next = setsDone + 1;
     if (next >= totalSets) {
       if (exIndex + 1 >= allExercises.length) {
         // Séance terminée
+        // eslint-disable-next-line react-hooks/purity
         const end = Date.now();
         const durationMin = Math.max(1, Math.round((end - (startTime || end)) / 60000));
         const cals = Math.round(6.0 * weight * (durationMin / 60)); // MET de 6.0 en moyenne
@@ -98,7 +130,24 @@ export default function SessionPage({ params }: { params: Promise<{ id: string }
             exercisesDone: allExercises.length,
             totalSets: allExercises.reduce((acc, ex) => acc + ex.sets, 0),
             mood: 4,
-            notes: "Séance complétée via mode direct."
+            notes: "Séance complétée via mode direct.",
+            exerciseResults: allExercises.map(ex => {
+              const tracked = ex.exerciseId === currentEx?.exerciseId
+                ? {
+                    repsCompleted: Number.parseInt(repsCompleted, 10),
+                    weightUsed: Number.parseFloat(weightUsed),
+                  }
+                : exerciseResults[ex.exerciseId];
+              const trackedReps = tracked?.repsCompleted;
+              const trackedWeight = tracked?.weightUsed;
+              return {
+                exerciseId: ex.exerciseId,
+                exerciseName: ex.exerciseName,
+                setsCompleted: ex.sets,
+                ...(trackedReps !== undefined && Number.isFinite(trackedReps) && trackedReps > 0 ? { repsCompleted: trackedReps } : {}),
+                ...(trackedWeight !== undefined && Number.isFinite(trackedWeight) && trackedWeight >= 0 ? { weightUsed: trackedWeight } : {}),
+              };
+            }),
           })
         }).catch(err => console.error("Failed to save workout", err));
 
@@ -119,6 +168,9 @@ export default function SessionPage({ params }: { params: Promise<{ id: string }
 
   const skipRest = () => { setRunning(false); setRestMode(false); setTimer(0); };
 
+  const todayIndex = (new Date().getDay() + 6) % 7;
+  const todayPlanDay = plan.weeklyPlan[todayIndex] ?? workDays[0];
+
   // ── Animation Variants ──
   const pageVariants = {
     initial: { opacity: 0, x: 20 },
@@ -131,7 +183,7 @@ export default function SessionPage({ params }: { params: Promise<{ id: string }
   const strokeDash = fillRatio * circ;
 
   if (phase === 'overview') {
-    const todayDay = workDays[0];
+    const todayDay = todayPlanDay;
     return (
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
         <div className="page-header">
@@ -292,6 +344,16 @@ export default function SessionPage({ params }: { params: Promise<{ id: string }
                 </h2>
                 <div style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', marginBottom: 24 }}>
                   <strong>{currentEx?.reps} répétitions</strong>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, maxWidth: 420, margin: '0 auto 28px' }}>
+                  <label style={{ textAlign: 'left', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                    Répétitions réalisées
+                    <input className="input" type="number" min="0" value={repsCompleted} onChange={event => setRepsCompleted(event.target.value)} placeholder="Ex. 12" />
+                  </label>
+                  <label style={{ textAlign: 'left', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                    Poids utilisé (kg)
+                    <input className="input" type="number" min="0" step="0.5" value={weightUsed} onChange={event => setWeightUsed(event.target.value)} placeholder="Optionnel" />
+                  </label>
                 </div>
 
                 {/* Sets progress */}

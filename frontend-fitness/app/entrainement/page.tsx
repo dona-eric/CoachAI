@@ -1,9 +1,11 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { Clock, Users, Target, ChevronRight, Calendar, CheckCircle } from 'lucide-react';
-import { trainingPlans } from '@/lib/data/plans';
 import { auth } from '@/auth';
 import { getDb } from '@/lib/mongodb';
+import { getWgerExercises } from '@/lib/wger';
+import { generateTrainingPlan } from '@/lib/training-plans';
+import type { UserProfile, UserTrainingPlan } from '@/lib/types';
 
 const goalLabel: Record<string, string> = {
   'perte-de-poids': '🔥 Perte de poids',
@@ -31,16 +33,35 @@ export default async function EntrainementPage() {
   const session = await auth();
   if (!session?.user) redirect('/auth/login');
 
-  const userId = (session.user as any).id;
+  const userId = session.user.id;
   const db = await getDb();
   
-  const profile = await db.collection("userProfiles").findOne({ userId });
+  const profile = await db.collection<UserProfile>("userProfiles").findOne({ userId });
   if (!profile || !profile.onboardingDone) {
     redirect('/onboarding');
   }
 
-  const activePlanId = profile.activePlanId;
-  const activePlan = trainingPlans.find(p => p.id === activePlanId);
+  let plans: UserTrainingPlan[] = await db.collection<UserTrainingPlan>("trainingPlans")
+    .find({ userId, status: "active" })
+    .sort({ updatedAt: -1 })
+    .toArray() as unknown as UserTrainingPlan[];
+
+  if (plans.length === 0) {
+    const cachedExercises = await db.collection("wgerExercises").find({}).toArray();
+    const exercises = cachedExercises.length > 0
+      ? cachedExercises as unknown as Awaited<ReturnType<typeof getWgerExercises>>
+      : await getWgerExercises();
+    const generatedPlan = generateTrainingPlan(userId, profile, exercises);
+    await db.collection<UserTrainingPlan>("trainingPlans").insertOne(generatedPlan);
+    await db.collection("userProfiles").updateOne(
+      { userId },
+      { $set: { activePlanId: generatedPlan.id, updatedAt: new Date() } },
+    );
+    plans = [generatedPlan];
+  }
+
+  const activePlanId = profile.activePlanId ?? plans[0]?.id;
+  const activePlan = plans.find(plan => plan.id === activePlanId) ?? plans[0];
 
   return (
     <div>
@@ -64,7 +85,7 @@ export default async function EntrainementPage() {
               <div className="badge badge-green" style={{ marginBottom: 8 }}>✓ Plan actif</div>
               <div style={{ fontWeight: 700, fontSize: '1.1rem' }}>{activePlan.name}</div>
               <div style={{ fontSize: '0.83rem', color: 'var(--text-secondary)', marginTop: 4 }}>
-                {activePlan.sessionsPerWeek} séances/sem · {activePlan.duration} semaines · {eqLabel[activePlan.equipment]}
+                {activePlan.sessionsPerWeek} séances/sem · {activePlan.duration} semaines · {activePlan.equipment.map(item => eqLabel[item] ?? item).join(', ')}
               </div>
             </div>
             <Link href={`/entrainement/${activePlan.id}`} className="btn btn-primary">
@@ -76,7 +97,7 @@ export default async function EntrainementPage() {
         <h2 className="section-title">Tous les programmes</h2>
 
         <div className="grid-2" style={{ gap: 20 }}>
-          {trainingPlans.map(plan => (
+          {plans.map(plan => (
             <div
               key={plan.id}
               className="card card-glow"
@@ -88,7 +109,7 @@ export default async function EntrainementPage() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
                 <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                   <span className={`badge ${levelColor[plan.level]}`}>{levelLabel[plan.level]}</span>
-                  <span className="badge badge-gray">{eqLabel[plan.equipment]}</span>
+                  <span className="badge badge-gray">{plan.equipment.map(item => eqLabel[item] ?? item).join(', ')}</span>
                   {plan.id === activePlanId && <span className="badge badge-green">Actif</span>}
                 </div>
               </div>
@@ -112,7 +133,7 @@ export default async function EntrainementPage() {
 
               {/* Tags */}
               <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 16 }}>
-                {plan.tags.map(t => (
+                {[plan.goal, ...plan.equipment].map(t => (
                   <span key={t} className="badge badge-gray" style={{ fontSize: '0.68rem' }}>{t}</span>
                 ))}
               </div>
@@ -163,7 +184,7 @@ export default async function EntrainementPage() {
             Répondez à 5 questions et obtenez un plan d&apos;entraînement parfaitement adapté à votre niveau, vos objectifs et votre matériel disponible.
           </p>
           <div style={{ display: 'flex', gap: 20, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 20 }}>
-            {['Votre niveau', 'Votre objectif', 'Équipement dispo', 'Fréquence souhaitée', 'Durée de séance'].map((s, i) => (
+            {['Votre niveau', 'Votre objectif', 'Équipement dispo', 'Fréquence souhaitée', 'Durée de séance'].map(s => (
               <div key={s} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
                 <CheckCircle size={13} color="var(--primary)" /> {s}
               </div>
