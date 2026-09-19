@@ -8,12 +8,12 @@ import AppShell from "@/components/layout/AppShell";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "KINETIC — Votre Coach Fitness Personnel",
-  description: "Plateforme de fitness complète : plans d'entraînement personnalisés, suivi des performances, nutrition et coaching IA. Entraînez-vous n'importe où, avec ou sans équipement.",
-  keywords: ["fitness", "coach", "entraînement", "nutrition", "bodyweight", "sport", "KINETIC"],
+  title: "KINETIC METHOD — The science of gymnastic strength",
+  description: "Master your movement. Des plans d'entraînement personnalisés pour développer force, contrôle et mobilité.",
+  keywords: ["KINETIC METHOD", "gymnastic strength", "calisthenics", "fitness", "entraînement", "movement"],
   openGraph: {
-    title: "KINETIC — Coaching Fitness IA",
-    description: "Transformez votre corps avec KINETIC.",
+    title: "KINETIC METHOD — The science of gymnastic strength",
+    description: "Master your movement.",
     type: "website",
   },
 };

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "KINETIC — Connexion",
+  title: "KINETIC - Connexion",
 };
 
 // Layout minimal pour les pages auth — pas de sidebar, pas de bottomnav

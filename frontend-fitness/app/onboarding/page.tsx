@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Zap, ChevronRight, ChevronLeft, Check } from 'lucide-react';
+import KineticBrand from '@/components/brand/KineticBrand';
 
 const steps = [
   {
@@ -155,7 +156,7 @@ export default function OnboardingPage() {
           <div style={{ width: 34, height: 34, borderRadius: 9, background: 'linear-gradient(135deg, #065f46, #10b981)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 12px rgba(16,185,129,0.35)' }}>
             <Zap size={17} color="#000" fill="#000" />
           </div>
-          <span style={{ fontWeight: 900, fontSize: '1.1rem', letterSpacing: '-0.03em' }}>KINETIC</span>
+          <KineticBrand size="sm" />
         </div>
 
         {/* Progress */}

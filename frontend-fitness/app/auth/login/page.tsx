@@ -109,7 +109,7 @@ export default function LoginPage() {
           </h1>
           <p style={{ color: 'var(--text-secondary)', fontSize: '1.05rem', lineHeight: 1.7, maxWidth: 420 }}>
             Plans personnalisés, suivi des performances, nutrition adaptée. 
-            Entraînez-vous n&apos;importe où — avec ou sans équipement.
+            Entraînez-vous n&apos;importe où avec ou sans équipement.
           </p>
         </motion.div>
 

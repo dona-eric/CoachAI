@@ -115,7 +115,7 @@ export default function LandingPage() {
         <div style={{ maxWidth: 820, position: 'relative' }}>
           <motion.div custom={0} variants={fadeUp} initial="hidden" animate="visible">
             <span className="badge badge-green" style={{ marginBottom: 28, display: 'inline-flex', fontSize: '0.8rem', padding: '6px 16px' }}>
-              <Zap size={12} /> Coaching fitness personnalisé
+              <Zap size={12} />                             KINETIC METHOD · The science of gymnastic strength
             </span>
           </motion.div>
 
@@ -132,7 +132,7 @@ export default function LandingPage() {
             custom={2} variants={fadeUp} initial="hidden" animate="visible"
             style={{ fontSize: 'clamp(1rem, 2.5vw, 1.2rem)', color: 'var(--text-secondary)', maxWidth: 560, margin: '0 auto 40px', lineHeight: 1.75 }}
           >
-            Un programme adapté à votre objectif, votre niveau et votre équipement, avec des exercices documentés et un suivi concret de vos progrès.
+            Master your movement. Un programme adapté à votre objectif, votre niveau et votre équipement, avec des exercices documentés et un suivi concret de vos progrès.
           </motion.p>
 
           <motion.div
@@ -179,7 +179,7 @@ export default function LandingPage() {
                   Équipement : {featuredExercise.equipmentNames.join(', ') || 'Poids du corps'}
                 </div>
                 <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>
-                  {featuredExercise.videoUrls.length > 0 ? 'Vidéo disponible' : 'Illustration disponible — vidéo non fournie pour cet exercice'}
+                  {featuredExercise.videoUrls.length > 0 ? 'Vidéo disponible' : ''}
                 </div>
                 <Link href="/auth/register" className="btn btn-primary" style={{ alignSelf: 'flex-start', marginTop: 8 }}>
                   Créer mon programme <ArrowRight size={16} />
@@ -346,9 +346,9 @@ export default function LandingPage() {
         flexWrap: 'wrap', gap: 10,
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Zap size={13} color="var(--primary)" />
+          {/* <Zap size={13} color="var(--primary)" /> */}
           <KineticBrand size="sm" />
-          <span style={{ color: 'var(--text-muted)', fontSize: '0.78rem' }}>© 2026 — Tous droits réservés</span>
+          <span style={{ color: 'var(--text-muted)', fontSize: '0.78rem' }}>© 2026 ~ fait par DTech-Africa</span>
         </div>
         <div style={{ display: 'flex', gap: 20 }}>
           <Link href="/confidentialite" style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Confidentialité</Link>

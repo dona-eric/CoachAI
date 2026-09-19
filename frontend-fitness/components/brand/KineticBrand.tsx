@@ -1,36 +1,22 @@
-import { Zap } from 'lucide-react';
+import logo from '@/app/assets/final_version.jpg';
 
 export default function KineticBrand({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
   const sizes = {
-    sm: { mark: 30, icon: 14, text: '1rem' },
-    md: { mark: 36, icon: 17, text: '1.1rem' },
-    lg: { mark: 44, icon: 21, text: '1.45rem' },
+    sm: { width: 92 },
+    md: { width: 116 },
+    lg: { width: 280 },
   };
   const current = sizes[size];
 
   return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}>
-      <span style={{
-        width: current.mark,
-        height: current.mark,
-        borderRadius: size === 'lg' ? 12 : 10,
-        background: 'linear-gradient(135deg, #065f46, #10b981)',
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        boxShadow: '0 0 16px rgba(16,185,129,0.35)',
-      }}>
-        <Zap size={current.icon} color="#000" fill="#000" strokeWidth={2.6} />
-      </span>
-      <span style={{
-        fontFamily: 'var(--font-inter), Inter, sans-serif',
-        fontWeight: 900,
-        fontSize: current.text,
-        letterSpacing: '0.08em',
-        lineHeight: 1,
-      }}>
-        KINETIC
-      </span>
+    <span style={{ display: 'inline-flex', width: current.width, flexShrink: 0 }}>
+      <img
+        src={logo.src}
+        alt="KINETIC METHOD"
+        width={logo.width}
+        height={logo.height}
+        style={{ display: 'block', width: '100%', height: 'auto' }}
+      />
     </span>
   );
 }
