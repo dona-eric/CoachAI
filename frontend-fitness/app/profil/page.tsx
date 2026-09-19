@@ -1,11 +1,12 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { Edit3, Target, Dumbbell, Award } from 'lucide-react';
+import { Target, Dumbbell, Award, Check, Lock } from 'lucide-react';
 import { auth } from '@/auth';
 import { getDb } from '@/lib/mongodb';
 import { calculateTrophyProgress } from '@/lib/trophies';
 import type { WgerTrophy } from '@/lib/wger';
 import type { WorkoutSession } from '@/lib/types';
+import EditProfileForm from '@/components/profile/EditProfileForm';
 
 const goalLabel: Record<string, string> = {
   'perte-de-poids': '🔥 Perte de poids',
@@ -99,9 +100,16 @@ export default async function ProfilPage() {
                 <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: 4 }}>semaines respectées</div>
               </div>
 
-              <button className="btn btn-ghost" style={{ width: '100%' }}>
-                <Edit3 size={14} /> Modifier le profil
-              </button>
+              <EditProfileForm initialValues={{
+                name: session.user.name ?? '',
+                email: session.user.email ?? '',
+                age: profile.age as number | undefined,
+                height: profile.height as number | undefined,
+                weight: profile.weight as number | undefined,
+                level: profile.level as 'debutant' | 'intermediaire' | 'avance',
+                goal: profile.goal as 'perte-de-poids' | 'prise-de-masse' | 'endurance' | 'sante',
+                equipment,
+              }} />
             </div>
 
             {/* Physical stats */}
@@ -165,14 +173,28 @@ export default async function ProfilPage() {
               </h2>
               <div className="grid-3" style={{ gap: 12 }}>
                 {trophyProgress.map(trophy => (
-                  <div key={trophy.uuid} className="card" style={{ padding: 16, opacity: trophy.unlocked ? 1 : 0.62 }}>
-                    <img src={trophy.image} alt="" loading="lazy" style={{ width: 56, height: 56, objectFit: 'contain', float: 'left', marginRight: 10 }} />
-                    <div style={{ fontWeight: 800, fontSize: '0.86rem' }}>{trophy.name}</div>
+                  <div key={trophy.uuid} className="card" style={{
+                    padding: 16,
+                    opacity: trophy.unlocked ? 1 : 0.68,
+                    border: trophy.unlocked ? '1px solid rgba(16,185,129,0.45)' : '1px solid var(--border)',
+                    position: 'relative',
+                  }}>
+                    <div style={{
+                      position: 'absolute', top: 10, right: 10, display: 'inline-flex', alignItems: 'center', gap: 4,
+                      color: trophy.unlocked ? 'var(--primary)' : 'var(--text-muted)', fontSize: '0.65rem', fontWeight: 800,
+                      textTransform: 'uppercase',
+                    }}>
+                      {trophy.unlocked ? <><Check size={12} /> Débloqué</> : <><Lock size={12} /> Verrouillé</>}
+                    </div>
+                    <img src={trophy.image} alt="" loading="lazy" style={{ width: 56, height: 56, objectFit: 'contain', float: 'left', marginRight: 10, filter: trophy.unlocked ? 'none' : 'grayscale(1)' }} />
+                    <div style={{ fontWeight: 800, fontSize: '0.86rem', paddingRight: 70 }}>{trophy.name}</div>
                     <div style={{ color: 'var(--text-muted)', fontSize: '0.72rem', lineHeight: 1.4, marginTop: 4 }}>{trophy.description}</div>
                     <div style={{ clear: 'both', marginTop: 12, height: 5, background: 'var(--bg-elevated)', borderRadius: 99 }}>
                       <div style={{ width: `${trophy.progress}%`, height: '100%', background: trophy.unlocked ? 'var(--primary)' : 'var(--text-muted)', borderRadius: 99 }} />
                     </div>
-                    <div style={{ color: 'var(--text-muted)', fontSize: '0.7rem', marginTop: 5 }}>{trophy.current.toLocaleString('fr-FR')} / {trophy.target.toLocaleString('fr-FR')}</div>
+                    <div style={{ color: trophy.unlocked ? 'var(--primary)' : 'var(--text-muted)', fontSize: '0.7rem', marginTop: 5, fontWeight: trophy.unlocked ? 700 : 500 }}>
+                      {trophy.current.toLocaleString('fr-FR')} / {trophy.target.toLocaleString('fr-FR')} atteint
+                    </div>
                   </div>
                 ))}
               </div>
