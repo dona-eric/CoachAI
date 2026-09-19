@@ -16,9 +16,11 @@ export interface Exercise {
   source?: 'local' | 'wger';
   sourceId?: number;
   imageUrl?: string;
+  images?: ExerciseImage[];
   videoUrls?: string[];
   videos?: ExerciseVideo[];
   aliases?: string[];
+  aliasRecords?: ExerciseAlias[];
   comments?: string[];
   exerciseComments?: ExerciseComment[];
   translations?: ExerciseTranslation[];
@@ -56,4 +58,33 @@ export interface ExerciseVideo {
   durationSeconds?: number;
   width?: number;
   height?: number;
+}
+
+export interface ExerciseImage {
+  id: number;
+  uuid: string;
+  exerciseId: number;
+  exerciseUuid: string;
+  image: string;
+  thumbnails: {
+    small?: string;
+    medium?: string;
+  };
+  isMain: boolean;
+  style: string;
+  license: number;
+  licenseTitle: string;
+  licenseObjectUrl: string;
+  licenseAuthor: string;
+  licenseAuthorUrl: string;
+  licenseDerivativeSourceUrl: string;
+  authorHistory: string[];
+  isAiGenerated: boolean;
+}
+
+export interface ExerciseAlias {
+  id: number;
+  uuid: string;
+  translationId: number;
+  alias: string;
 }

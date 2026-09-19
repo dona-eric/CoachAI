@@ -1,11 +1,25 @@
 export interface Food {
   id: string;
+  uuid?: string;
   name: string;
+  commonName?: string;
+  brand?: string;
+  sourceName?: string;
+  sourceUrl?: string;
+  code?: string;
   emoji: string;
   calories: number;
   protein: number;
   carbs: number;
   fat: number;
+  sugar?: number;
+  saturatedFat?: number;
+  fiber?: number;
+  sodium?: number;
+  isVegan?: boolean | null;
+  isVegetarian?: boolean | null;
+  nutriscore?: string | null;
+  weightUnits?: { id: number; uuid: string; gram: number; name: string }[];
   source?: 'wger';
 }
 
