@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { Flame, Dumbbell, Calendar, TrendingUp, Apple, Target, ChevronRight, Zap, BookOpen } from 'lucide-react';
+import { Flame, Dumbbell, Calendar, TrendingUp, ChevronRight, Zap} from 'lucide-react';
 import type { UserTrainingPlan } from '@/lib/types';
 
 const fadeUp = (delay = 0) => ({
