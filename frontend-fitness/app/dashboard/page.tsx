@@ -153,8 +153,8 @@ export default function DashboardPage() {
               style={{ fontSize: '1.5rem', display: 'inline-block' }}
             >🔥</motion.span>
             <div>
-              <div style={{ fontWeight: 900, fontSize: '1.5rem', lineHeight: 1 }}>{stats?.streak ?? 0}</div>
-              <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>jours d&apos;affilée</div>
+              <div style={{ fontWeight: 900, fontSize: '1.5rem', lineHeight: 1 }}>{stats?.weeklyStreak ?? 0}</div>
+              <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>semaines respectées</div>
             </div>
           </motion.div>
         </div>
