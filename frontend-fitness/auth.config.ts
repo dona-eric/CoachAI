@@ -4,6 +4,7 @@ import Google from "next-auth/providers/google";
 
 // Configuration Edge-compatible pour le Middleware
 export const authConfig = {
+  trustHost: true,
   providers: [
     GitHub({
       clientId: process.env.GITHUB_ID,

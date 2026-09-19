@@ -3,6 +3,9 @@ import { redirect } from 'next/navigation';
 import { Edit3, Target, Dumbbell, Award } from 'lucide-react';
 import { auth } from '@/auth';
 import { getDb } from '@/lib/mongodb';
+import { calculateTrophyProgress } from '@/lib/trophies';
+import type { WgerTrophy } from '@/lib/wger';
+import type { WorkoutSession } from '@/lib/types';
 
 const goalLabel: Record<string, string> = {
   'perte-de-poids': '🔥 Perte de poids',
@@ -30,19 +33,22 @@ export default async function ProfilPage() {
   }
 
   // Fetch stats depuis MongoDB
-  const sessions = await db.collection("workoutSessions").find({ userId }).toArray();
+  const sessions = await db.collection<WorkoutSession>("workoutSessions").find({ userId }).toArray();
   const totalSessions = sessions.length;
   const totalCalories = sessions.reduce((a, s) => a + (s.calories as number ?? 0), 0);
 
   // Fetch records depuis MongoDB
   const personalRecords = await db.collection("personalRecords").find({ userId }).sort({ date: -1 }).toArray();
+  const trophies = await db.collection<WgerTrophy>("wgerTrophies").find({}).toArray();
+  const trophyProgress = calculateTrophyProgress(trophies, sessions);
+  const unlockedTrophies = trophyProgress.filter(trophy => trophy.unlocked);
 
 
   const weight = profile.weight as number ?? 0;
   const height = profile.height as number ?? 0;
   const bmi = height > 0 && weight > 0 ? (weight / ((height / 100) ** 2)).toFixed(1) : '--';
   const age = profile.age as number ?? '--';
-  const streak = profile.streak as number ?? 0;
+  const weeklyStreak = profile.weeklyStreak as number ?? 0;
   const equipment = (profile.equipment as string[]) ?? [];
 
   // Date d'inscription depuis user (pas profile)
@@ -88,9 +94,9 @@ export default async function ProfilPage() {
                 marginBottom: 16,
               }}>
                 <div style={{ fontSize: '1.8rem', fontWeight: 900, color: 'var(--primary)', lineHeight: 1 }}>
-                  🔥 {streak}
+                  🔥 {weeklyStreak}
                 </div>
-                <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: 4 }}>jours d&apos;affilée</div>
+                <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: 4 }}>semaines respectées</div>
               </div>
 
               <button className="btn btn-ghost" style={{ width: '100%' }}>
@@ -141,8 +147,8 @@ export default async function ProfilPage() {
                 {[
                   { label: 'Séances totales', value: totalSessions, color: 'var(--primary)' },
                   { label: 'Calories totales', value: `${totalCalories.toLocaleString('fr')} kcal`, color: '#ef4444' },
-                  { label: 'Semaines actives', value: '--', color: 'var(--blue)' },
-                  { label: 'Badges débloqués', value: 'Bientôt disponible', color: 'var(--gold)' },
+                  { label: 'Semaines actives', value: new Set(sessions.map(session => String(session.date).slice(0, 7))).size, color: 'var(--blue)' },
+                  { label: 'Trophées débloqués', value: `${unlockedTrophies.length}/${trophyProgress.length}`, color: 'var(--gold)' },
                 ].map(({ label, value, color }) => (
                   <div key={label} className="stat-card">
                     <div className="stat-label">{label}</div>
@@ -158,9 +164,17 @@ export default async function ProfilPage() {
                 <Award size={16} color="var(--gold)" /> Badges & Achievements
               </h2>
               <div className="grid-3" style={{ gap: 12 }}>
-                <div className="card" style={{ padding: 16, color: 'var(--text-muted)' }}>
-                  Les badges seront débloqués à partir de vos séances réelles.
-                </div>
+                {trophyProgress.map(trophy => (
+                  <div key={trophy.uuid} className="card" style={{ padding: 16, opacity: trophy.unlocked ? 1 : 0.62 }}>
+                    <img src={trophy.image} alt="" loading="lazy" style={{ width: 56, height: 56, objectFit: 'contain', float: 'left', marginRight: 10 }} />
+                    <div style={{ fontWeight: 800, fontSize: '0.86rem' }}>{trophy.name}</div>
+                    <div style={{ color: 'var(--text-muted)', fontSize: '0.72rem', lineHeight: 1.4, marginTop: 4 }}>{trophy.description}</div>
+                    <div style={{ clear: 'both', marginTop: 12, height: 5, background: 'var(--bg-elevated)', borderRadius: 99 }}>
+                      <div style={{ width: `${trophy.progress}%`, height: '100%', background: trophy.unlocked ? 'var(--primary)' : 'var(--text-muted)', borderRadius: 99 }} />
+                    </div>
+                    <div style={{ color: 'var(--text-muted)', fontSize: '0.7rem', marginTop: 5 }}>{trophy.current.toLocaleString('fr-FR')} / {trophy.target.toLocaleString('fr-FR')}</div>
+                  </div>
+                ))}
               </div>
             </div>
 

@@ -21,6 +21,7 @@ export interface UserProfile {
   equipment: string[];      // ['bodyweight', 'maison', 'salle']
   activePlanId?: string;
   streak: number;
+  weeklyStreak?: number;
   lastSessionDate?: string; // ISO date string
   onboardingDone: boolean;
   updatedAt: Date;
@@ -91,6 +92,30 @@ export interface ExerciseResult {
   repsCompleted?: number;
   durationSeconds?: number;
   weightUsed?: number;
+  plannedSets?: number;
+  plannedReps?: string;
+  sets?: SetResult[];
+  completed?: boolean;
+}
+
+export interface SetResult {
+  setNumber: number;
+  repsCompleted?: number;
+  durationSeconds?: number;
+  weightUsed?: number;
+  restSeconds?: number;
+  completed: boolean;
+  skipped?: boolean;
+  difficulty?: number;
+  notes?: string;
+}
+
+export interface ExerciseProgressPoint {
+  date: string;
+  volume: number;
+  sets: number;
+  reps: number;
+  bestWeight: number;
 }
 
 export interface PersonalRecord {
@@ -110,6 +135,11 @@ export interface MealEntry {
   userId: string;
   date: string;             // 'YYYY-MM-DD'
   meal: 'matin' | 'midi' | 'soir' | 'collation';
+  ingredientId?: string;
+  ingredientUuid?: string;
+  sourceName?: string;
+  brand?: string;
+  weightUnit?: string;
   foodName: string;
   emoji: string;
   quantity: number;         // grammes

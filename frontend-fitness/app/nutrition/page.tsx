@@ -60,6 +60,7 @@ export default function NutritionPage() {
   const [activeTab, setActiveTab] = useState<'matin' | 'midi' | 'soir' | 'collation'>('midi');
   const [search, setSearch] = useState('');
   const [isAdding, setIsAdding] = useState<string | null>(null);
+  const [quantity, setQuantity] = useState(100);
 
   useEffect(() => {
     const query = search.trim();
@@ -111,8 +112,9 @@ export default function NutritionPage() {
     });
   };
 
-  const addFood = async (food: any) => {
+  const addFood = async (food: Food) => {
     setIsAdding(food.id);
+    const ratio = quantity / 100;
     await fetch('/api/nutrition', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -120,11 +122,15 @@ export default function NutritionPage() {
         meal: activeTab,
         foodName: food.name,
         emoji: food.emoji,
-        quantity: 100, // portion par défaut
-        calories: food.calories,
-        protein: food.protein,
-        carbs: food.carbs,
-        fat: food.fat,
+        quantity,
+        ingredientId: food.id,
+        ingredientUuid: food.uuid,
+        sourceName: food.sourceName,
+        brand: food.brand,
+        calories: Math.round(food.calories * ratio),
+        protein: Number((food.protein * ratio).toFixed(2)),
+        carbs: Number((food.carbs * ratio).toFixed(2)),
+        fat: Number((food.fat * ratio).toFixed(2)),
       }),
     });
     await fetchNutrition();
@@ -295,6 +301,10 @@ export default function NutritionPage() {
                 <Search size={14} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                 <input className="input" style={{ paddingLeft: 32, fontSize: '0.85rem' }} placeholder="Rechercher..." value={search} onChange={e => setSearch(e.target.value)} />
               </div>
+              <label style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: 12 }}>
+                Quantité (g)
+                <input className="input" type="number" min="1" step="1" value={quantity} onChange={event => setQuantity(Math.max(1, Number(event.target.value) || 1))} />
+              </label>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                 {filteredFoods.map(f => (
                   <div key={f.id} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 10px', background: 'var(--bg-elevated)', borderRadius: 8 }}>

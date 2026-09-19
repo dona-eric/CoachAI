@@ -1,4 +1,4 @@
-import type { Exercise, ExerciseVideo } from "@/lib/data/exercises";
+import type { Exercise, ExerciseAlias, ExerciseImage, ExerciseVideo } from "@/lib/data/exercises";
 
 const WGER_API_URL = "https://wger.de/api/v2";
 const WGER_PAGE_SIZE = 100;
@@ -8,6 +8,26 @@ export interface WgerExerciseComment {
   uuid: string;
   translation: number;
   comment: string;
+}
+
+export interface WgerExerciseAlias {
+  id: number;
+  uuid: string;
+  translation: number;
+  alias: string;
+}
+
+export interface WgerTrophy {
+  id: number;
+  uuid: string;
+  name: string;
+  description: string;
+  image: string;
+  trophy_type: "count" | "sequence" | "volume" | string;
+  is_hidden: boolean;
+  is_progressive: boolean;
+  is_repeatable: boolean;
+  order: number;
 }
 interface WgerReference {
   id: number;
@@ -111,14 +131,47 @@ export interface WgerVideoRecord {
   author_history: string[];
 }
 
+export interface WgerExerciseImageRecord {
+  id: number;
+  uuid: string;
+  exercise: number;
+  exercise_uuid: string;
+  image: string;
+  thumbnails: { small?: string; medium?: string };
+  is_main: boolean;
+  style: string;
+  license: number;
+  license_title: string;
+  license_object_url: string;
+  license_author: string;
+  license_author_url: string;
+  license_derivative_source_url: string;
+  author_history: string[];
+  is_ai_generated: boolean;
+}
+
 export interface WgerFood {
   id: string;
+  uuid?: string;
   name: string;
+  commonName?: string;
+  brand?: string;
+  sourceName?: string;
+  sourceUrl?: string;
+  code?: string;
   emoji: string;
   calories: number;
   protein: number;
   carbs: number;
   fat: number;
+  sugar?: number;
+  saturatedFat?: number;
+  fiber?: number;
+  sodium?: number;
+  isVegan?: boolean | null;
+  isVegetarian?: boolean | null;
+  nutriscore?: string | null;
+  weightUnits?: WgerWeightUnit[];
   source: "wger";
 }
 
@@ -133,13 +186,46 @@ export interface WgerCategory {
   name: string;
 }
 
-interface WgerIngredientInfo {
+interface WgerWeightUnit {
   id: number;
+  uuid: string;
+  ingredient: number;
+  gram: number;
   name: string;
+}
+
+interface WgerIngredient {
+  id: number;
+  uuid: string;
+  remote_id: string;
+  source_name: string;
+  source_url: string;
+  code: string;
+  name: string;
+  common_name: string;
+  brand: string;
+  created: string;
+  last_update: string;
+  last_imported: string;
   energy: number | null;
   protein: string | null;
   carbohydrates: string | null;
+  carbohydrates_sugar: string | null;
   fat: string | null;
+  fat_saturated: string | null;
+  fiber: string | null;
+  sodium: string | null;
+  is_vegan: boolean | null;
+  is_vegetarian: boolean | null;
+  weight_units: WgerWeightUnit[];
+  nutriscore: string | null;
+  license: number;
+  license_title: string;
+  license_object_url: string;
+  license_author: string;
+  license_author_url: string;
+  license_derivative_source_url: string;
+  language: number;
 }
 
 export interface WgerExercise extends Exercise {
@@ -162,6 +248,8 @@ export interface WgerExercise extends Exercise {
   videoUrls: string[];
   videos: NonNullable<Exercise["videos"]>;
   videoRecords: WgerVideoRecord[];
+  imageRecords: WgerExerciseImageRecord[];
+  wgerAliasRecords: WgerExerciseAlias[];
   aliases: string[];
   comments: string[];
   commentRecords: WgerExerciseComment[];
@@ -213,6 +301,8 @@ function normalizeExercise(
   source?: WgerExerciseSummary,
   comments: WgerExerciseComment[] = [],
   translations: WgerExerciseTranslation[] = exercise.translations,
+  images: WgerExerciseImageRecord[] = [],
+  aliases: WgerExerciseAlias[] = [],
 ): WgerExercise | null {
   const translation = getTranslation(translations);
   if (!translation?.name) return null;
@@ -225,11 +315,32 @@ function normalizeExercise(
     translations.map(item => item.id),
   );
   const relatedComments = comments.filter(item => translationIds.has(item.translation));
+  const relatedAliases = aliases.filter(item => translationIds.has(item.translation));
   const sourceVideos = [...new Map(
     (exercise.videos ?? [])
       .filter(video => video.video ?? video.url)
       .map(video => [video.uuid ?? `${video.exercise ?? exercise.id}:${video.video ?? video.url}`, video]),
   ).values()];
+  const sourceImages = images.length > 0
+    ? images
+    : exercise.images.map((image, index) => ({
+      id: index,
+      uuid: `${exercise.uuid}-image-${index}`,
+      exercise: exercise.id,
+      exercise_uuid: exercise.uuid,
+      image: image.image,
+      thumbnails: {},
+      is_main: image.is_main,
+      style: "",
+      license: 0,
+      license_title: "",
+      license_object_url: "",
+      license_author: "",
+      license_author_url: "",
+      license_derivative_source_url: "",
+      author_history: [],
+      is_ai_generated: false,
+    }));
 
   return {
     id: `wger-${exercise.id}`,
@@ -261,7 +372,26 @@ function normalizeExercise(
     equipmentIds: source?.equipment ?? exercise.equipment.map(item => item.id),
     wgerEquipment: exercise.equipment.map(item => ({ id: item.id, name: item.name })),
     variationGroup: source?.variation_group,
-    imageUrl: exercise.images.find(image => image.is_main)?.image ?? exercise.images[0]?.image,
+    imageUrl: sourceImages.find(image => image.is_main)?.image ?? sourceImages[0]?.image,
+    images: sourceImages.map((image): ExerciseImage => ({
+      id: image.id,
+      uuid: image.uuid,
+      exerciseId: image.exercise,
+      exerciseUuid: image.exercise_uuid,
+      image: image.image,
+      thumbnails: image.thumbnails,
+      isMain: image.is_main,
+      style: image.style,
+      license: image.license,
+      licenseTitle: image.license_title,
+      licenseObjectUrl: image.license_object_url,
+      licenseAuthor: image.license_author,
+      licenseAuthorUrl: image.license_author_url,
+      licenseDerivativeSourceUrl: image.license_derivative_source_url,
+      authorHistory: image.author_history,
+      isAiGenerated: image.is_ai_generated,
+    })),
+    imageRecords: sourceImages,
     videos: sourceVideos
       .map((video): ExerciseVideo | null => {
         const url = video.video ?? video.url;
@@ -302,7 +432,17 @@ function normalizeExercise(
     videoUrls: sourceVideos
       .map(video => video.video ?? video.url)
       .filter((video): video is string => Boolean(video)),
-    aliases: (exercise.aliases ?? []).map(alias => alias.alias),
+    aliases: [...new Set([
+      ...(exercise.aliases ?? []).map(alias => alias.alias),
+      ...relatedAliases.map(alias => alias.alias),
+    ])],
+    aliasRecords: relatedAliases.map((alias): ExerciseAlias => ({
+      id: alias.id,
+      uuid: alias.uuid,
+      translationId: alias.translation,
+      alias: alias.alias,
+    })),
+    wgerAliasRecords: relatedAliases,
     comments: (exercise.comments ?? []).map(comment => comment.comment),
     exerciseComments: relatedComments.map(comment => ({
       id: comment.id,
@@ -373,6 +513,47 @@ export async function getWgerVideoRecords(): Promise<WgerVideoRecord[]> {
   return [firstPage, ...remainingPages].flatMap(page => page.results);
 }
 
+export async function getWgerExerciseImages(): Promise<WgerExerciseImageRecord[]> {
+  const firstPage = await fetchWger<WgerListResponse<WgerExerciseImageRecord>>(
+    "/exerciseimage/?limit=100&offset=0",
+  );
+  const pageCount = Math.ceil(firstPage.count / 100);
+  const remainingPages = await Promise.all(
+    Array.from({ length: Math.max(0, pageCount - 1) }, (_, index) =>
+      fetchWger<WgerListResponse<WgerExerciseImageRecord>>(
+        `/exerciseimage/?limit=100&offset=${(index + 1) * 100}`,
+      ),
+    ),
+  );
+  return [firstPage, ...remainingPages].flatMap(page => page.results);
+}
+
+export async function getWgerExerciseAliases(): Promise<WgerExerciseAlias[]> {
+  const firstPage = await fetchWger<WgerListResponse<WgerExerciseAlias>>(
+    "/exercisealias/?limit=100&offset=0",
+  );
+  const pageCount = Math.ceil(firstPage.count / 100);
+  const remainingPages = await Promise.all(
+    Array.from({ length: Math.max(0, pageCount - 1) }, (_, index) =>
+      fetchWger<WgerListResponse<WgerExerciseAlias>>(
+        `/exercisealias/?limit=100&offset=${(index + 1) * 100}`,
+      ),
+    ),
+  );
+  return [firstPage, ...remainingPages].flatMap(page => page.results);
+}
+
+export async function getWgerTrophies(): Promise<WgerTrophy[]> {
+  const firstPage = await fetchWger<WgerListResponse<WgerTrophy>>("/trophy/?limit=100&offset=0");
+  const pageCount = Math.ceil(firstPage.count / 100);
+  const remainingPages = await Promise.all(
+    Array.from({ length: Math.max(0, pageCount - 1) }, (_, index) =>
+      fetchWger<WgerListResponse<WgerTrophy>>(`/trophy/?limit=100&offset=${(index + 1) * 100}`),
+    ),
+  );
+  return [firstPage, ...remainingPages].flatMap(page => page.results);
+}
+
 export async function getWgerVideosForExercise(exerciseId: number): Promise<WgerVideoRecord[]> {
   const response = await fetchWger<WgerListResponse<WgerVideoRecord>>(
     `/video/?exercise=${exerciseId}&limit=100`,
@@ -425,6 +606,8 @@ export async function getWgerExercises(): Promise<WgerExercise[]> {
 
   const summaries = [firstPage, ...remainingPages].flatMap(page => page.results);
   const videoRecords = await getWgerVideoRecords();
+  const imageRecords = await getWgerExerciseImages();
+  const exerciseAliases = await getWgerExerciseAliases();
   const exerciseComments = await getWgerExerciseComments();
   const exerciseTranslations = await getWgerExerciseTranslations();
   const translationsByExercise = new Map<number, WgerExerciseTranslation[]>();
@@ -438,6 +621,20 @@ export async function getWgerExercises(): Promise<WgerExercise[]> {
     const current = videosByExercise.get(video.exercise) ?? [];
     current.push(video);
     videosByExercise.set(video.exercise, current);
+  }
+  const imagesByExercise = new Map<number, WgerExerciseImageRecord[]>();
+  for (const image of imageRecords) {
+    const current = imagesByExercise.get(image.exercise) ?? [];
+    current.push(image);
+    imagesByExercise.set(image.exercise, current);
+  }
+  const aliasesByExercise = new Map<number, WgerExerciseAlias[]>();
+  for (const alias of exerciseAliases) {
+    const translation = exerciseTranslations.find(item => item.id === alias.translation);
+    if (!translation) continue;
+    const current = aliasesByExercise.get(translation.exercise) ?? [];
+    current.push(alias);
+    aliasesByExercise.set(translation.exercise, current);
   }
   const detailedExercises: { summary: WgerExerciseSummary; detail: WgerExerciseInfo }[] = [];
   for (let offset = 0; offset < summaries.length; offset += 25) {
@@ -459,7 +656,14 @@ export async function getWgerExercises(): Promise<WgerExercise[]> {
   return detailedExercises
     .map(({ summary, detail }) => {
       const translations = translationsByExercise.get(summary.id) ?? detail.translations;
-      return normalizeExercise(detail, summary, exerciseComments, translations);
+      return normalizeExercise(
+        detail,
+        summary,
+        exerciseComments,
+        translations,
+        imagesByExercise.get(summary.id) ?? [],
+        aliasesByExercise.get(summary.id) ?? [],
+      );
     })
     .filter((exercise): exercise is WgerExercise => exercise !== null);
 }
@@ -503,20 +707,35 @@ export async function getWgerExerciseBySlug(slug: string): Promise<WgerExercise 
   }, undefined, comments, translations.results);
 }
 
-export async function searchWgerFoods(search: string): Promise<WgerFood[]> {
+export async function searchWgerFoods(search: string, page = 1): Promise<WgerFood[]> {
   const query = encodeURIComponent(search.trim());
-  const response = await fetchWger<WgerListResponse<WgerIngredientInfo>>(
-    `/ingredientinfo/?limit=20&name__icontains=${query}`,
+  const offset = (page - 1) * 20;
+  const response = await fetchWger<WgerListResponse<WgerIngredient>>(
+    `/ingredientinfo/?limit=20&offset=${offset}&name__search=${query}`,
   );
 
   return response.results.map(food => ({
     id: `wger-food-${food.id}`,
+    uuid: food.uuid,
     name: food.name,
+    commonName: food.common_name,
+    brand: food.brand,
+    sourceName: food.source_name,
+    sourceUrl: food.source_url,
+    code: food.code,
     emoji: "🍽️",
     calories: Math.round(food.energy ?? 0),
     protein: Number.parseFloat(food.protein ?? "0") || 0,
     carbs: Number.parseFloat(food.carbohydrates ?? "0") || 0,
     fat: Number.parseFloat(food.fat ?? "0") || 0,
+    sugar: Number.parseFloat(food.carbohydrates_sugar ?? "0") || 0,
+    saturatedFat: Number.parseFloat(food.fat_saturated ?? "0") || 0,
+    fiber: Number.parseFloat(food.fiber ?? "0") || 0,
+    sodium: Number.parseFloat(food.sodium ?? "0") || 0,
+    isVegan: food.is_vegan,
+    isVegetarian: food.is_vegetarian,
+    nutriscore: food.nutriscore,
+    weightUnits: food.weight_units,
     source: "wger" as const,
   }));
 }

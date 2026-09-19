@@ -343,9 +343,9 @@ export default function LandingPage() {
         borderTop: '1px solid var(--border)',
         padding: '20px 40px',
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        flexWrap: 'wrap', gap: 10,
+        flexWrap: 'wrap', gap: 16,
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14, minWidth: 0 }}>
           {/* <Zap size={13} color="var(--primary)" /> */}
           <KineticBrand size="sm" />
           <span style={{ color: 'var(--text-muted)', fontSize: '0.78rem' }}>© 2026 ~ fait par DTech-Africa</span>

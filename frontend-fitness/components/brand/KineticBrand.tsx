@@ -2,9 +2,9 @@ import logo from '@/app/assets/final_version.jpg';
 
 export default function KineticBrand({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
   const sizes = {
-    sm: { width: 92 },
-    md: { width: 116 },
-    lg: { width: 280 },
+    sm: { width: 132 },
+    md: { width: 150 },
+    lg: { width: 300 },
   };
   const current = sizes[size];
 

@@ -2,6 +2,8 @@ import { redirect } from 'next/navigation';
 import { TrendingUp, TrendingDown, Trophy, Activity, Flame, Dumbbell } from 'lucide-react';
 import { auth } from '@/auth';
 import { getDb } from '@/lib/mongodb';
+import type { ExerciseResult, SetResult } from '@/lib/types';
+import ExerciseProgressExplorer from '@/components/performance/ExerciseProgressExplorer';
 
 // Simple SVG line chart
 function LineChart({
@@ -45,6 +47,7 @@ function BarChart({ data }: { data: { label: string; value: number; max: number 
   if (data.length === 0) {
     return <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Aucune donnée récente</div>;
   }
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
       {data.map(({ label, value, max }) => (
@@ -60,6 +63,18 @@ function BarChart({ data }: { data: { label: string; value: number; max: number 
       ))}
     </div>
   );
+}
+
+function completedSets(result: ExerciseResult): SetResult[] {
+  if (result.sets?.length) {
+    return result.sets.filter(set => set.completed && !set.skipped);
+  }
+  return [{
+    setNumber: 1,
+    completed: true,
+    repsCompleted: result.repsCompleted,
+    weightUsed: result.weightUsed,
+  }];
 }
 
 export default async function PerformancePage() {
@@ -97,6 +112,47 @@ export default async function PerformancePage() {
     value: s.calories as number,
     max: 400,
   }));
+
+  const exerciseMap = new Map<string, {
+    id: string;
+    name: string;
+    sessions: number;
+    totalSets: number;
+    totalReps: number;
+    totalVolume: number;
+    bestWeight: number;
+    latestVolume: number;
+    previousVolume: number;
+  }>();
+  for (const workout of sessionHistory) {
+    for (const rawResult of workout.exerciseResults ?? []) {
+      const result = rawResult as ExerciseResult;
+      const sets = completedSets(result);
+      const volume = sets.reduce((sum, set) => sum + (set.weightUsed ?? 0) * (set.repsCompleted ?? 0), 0);
+      const current = exerciseMap.get(result.exerciseId) ?? {
+        id: result.exerciseId,
+        name: result.exerciseName,
+        sessions: 0,
+        totalSets: 0,
+        totalReps: 0,
+        totalVolume: 0,
+        bestWeight: 0,
+        latestVolume: 0,
+        previousVolume: 0,
+      };
+      current.previousVolume = current.latestVolume;
+      current.latestVolume = volume;
+      current.sessions += 1;
+      current.totalSets += sets.length;
+      current.totalReps += sets.reduce((sum, set) => sum + (set.repsCompleted ?? 0), 0);
+      current.totalVolume += volume;
+      current.bestWeight = Math.max(current.bestWeight, ...sets.map(set => set.weightUsed ?? 0));
+      exerciseMap.set(result.exerciseId, current);
+    }
+  }
+  const exerciseProgress = [...exerciseMap.values()]
+    .sort((a, b) => b.totalVolume - a.totalVolume || b.sessions - a.sessions)
+    .slice(0, 12);
 
   const chartData = weightHistory.map((w: any) => ({
     date: w.date,
@@ -154,6 +210,68 @@ export default async function PerformancePage() {
             <h2 style={{ fontWeight: 700, fontSize: '1rem', marginBottom: 16 }}>Calories brûlées (7 dernières séances)</h2>
             <BarChart data={[...weeklyCalData].reverse()} />
           </div>
+        </div>
+
+        {/* Exercise progression */}
+        <ExerciseProgressExplorer exercises={exerciseProgress.map(exercise => ({
+          exerciseId: exercise.id,
+          exerciseName: exercise.name,
+          sessions: exercise.sessions,
+          totalVolume: exercise.totalVolume,
+          bestWeight: exercise.bestWeight,
+          bestReps: exercise.totalReps,
+        }))} />
+
+        <div className="card" style={{ padding: 24, marginBottom: 20 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+            <div>
+              <h2 style={{ fontWeight: 700, fontSize: '1rem', marginBottom: 4 }}>Progression par exercice</h2>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.78rem' }}>
+                Basée sur les séries réellement terminées.
+              </p>
+            </div>
+            <span className="badge badge-blue">{exerciseProgress.length} exercices suivis</span>
+          </div>
+          {exerciseProgress.length > 0 ? (
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.82rem' }}>
+                <thead>
+                  <tr style={{ color: 'var(--text-muted)', textAlign: 'left', borderBottom: '1px solid var(--border)' }}>
+                    <th style={{ padding: '10px 8px' }}>Exercice</th>
+                    <th style={{ padding: '10px 8px' }}>Séances</th>
+                    <th style={{ padding: '10px 8px' }}>Séries</th>
+                    <th style={{ padding: '10px 8px' }}>Répétitions</th>
+                    <th style={{ padding: '10px 8px' }}>Meilleure charge</th>
+                    <th style={{ padding: '10px 8px', textAlign: 'right' }}>Volume total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {exerciseProgress.map(exercise => {
+                    const delta = exercise.latestVolume - exercise.previousVolume;
+                    return (
+                      <tr key={exercise.id} style={{ borderBottom: '1px solid var(--border)' }}>
+                        <td style={{ padding: '12px 8px', fontWeight: 700 }}>{exercise.name}</td>
+                        <td style={{ padding: '12px 8px' }}>{exercise.sessions}</td>
+                        <td style={{ padding: '12px 8px' }}>{exercise.totalSets}</td>
+                        <td style={{ padding: '12px 8px' }}>{exercise.totalReps || '—'}</td>
+                        <td style={{ padding: '12px 8px' }}>{exercise.bestWeight > 0 ? `${exercise.bestWeight} kg` : 'Poids du corps'}</td>
+                        <td style={{ padding: '12px 8px', textAlign: 'right', color: 'var(--primary)', fontWeight: 700 }}>
+                          {exercise.totalVolume > 0 ? `${Math.round(exercise.totalVolume).toLocaleString('fr')} kg` : '—'}
+                          <span style={{ display: 'block', color: delta >= 0 ? 'var(--primary)' : '#ef4444', fontSize: '0.7rem', fontWeight: 500 }}>
+                            {delta > 0 ? `+${Math.round(delta)} cette séance` : delta < 0 ? `${Math.round(delta)} cette séance` : 'stable'}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+              Terminez votre première séance pour commencer à suivre vos performances.
+            </div>
+          )}
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
