@@ -4,6 +4,8 @@ import {
   getWgerExercises,
   type WgerExercise,
   type WgerExerciseComment,
+  type WgerExerciseImageRecord,
+  type WgerExerciseAlias,
   type WgerExerciseTranslation,
 } from "@/lib/wger";
 
@@ -13,6 +15,8 @@ export async function GET() {
   await db.collection("wgerVideos").createIndex({ uuid: 1 }, { unique: true });
   await db.collection("wgerExerciseComments").createIndex({ uuid: 1 }, { unique: true });
   await db.collection("wgerExerciseTranslations").createIndex({ uuid: 1 }, { unique: true });
+  await db.collection("wgerExerciseImages").createIndex({ uuid: 1 }, { unique: true });
+  await db.collection("wgerExerciseAliases").createIndex({ uuid: 1 }, { unique: true });
   const cached = await db.collection<WgerExercise>("wgerExercises").find({}).toArray();
   if (cached.length > 0) {
     return NextResponse.json({ source: "wger-cache", exercises: cached });
@@ -69,6 +73,36 @@ export async function GET() {
             replaceOne: {
               filter: { uuid: translation.uuid },
               replacement: { ...translation, syncedAt: new Date() },
+              upsert: true,
+            },
+          })),
+        );
+      }
+      const images = [...new Map(
+        exercises.flatMap(exercise => exercise.imageRecords)
+          .map(image => [image.uuid, image]),
+      ).values()];
+      if (images.length > 0) {
+        await db.collection<WgerExerciseImageRecord>("wgerExerciseImages").bulkWrite(
+          images.map(image => ({
+            replaceOne: {
+              filter: { uuid: image.uuid },
+              replacement: { ...image, syncedAt: new Date() },
+              upsert: true,
+            },
+          })),
+        );
+      }
+      const aliases = [...new Map(
+        exercises.flatMap(exercise => exercise.wgerAliasRecords)
+          .map(alias => [alias.uuid, alias]),
+      ).values()];
+      if (aliases.length > 0) {
+        await db.collection<WgerExerciseAlias>("wgerExerciseAliases").bulkWrite(
+          aliases.map(alias => ({
+            replaceOne: {
+              filter: { uuid: alias.uuid },
+              replacement: { ...alias, syncedAt: new Date() },
               upsert: true,
             },
           })),

@@ -33,7 +33,11 @@ export async function POST(req: NextRequest) {
   const userId = session.user.id;
   const body: Omit<MealEntry, "userId" | "createdAt"> = await req.json();
 
-  if (!body.foodName || !body.meal || body.calories === undefined) {
+  if (!body.foodName || !body.meal || !Number.isFinite(body.quantity) || body.quantity <= 0
+    || !Number.isFinite(body.calories) || body.calories < 0
+    || !Number.isFinite(body.protein) || body.protein < 0
+    || !Number.isFinite(body.carbs) || body.carbs < 0
+    || !Number.isFinite(body.fat) || body.fat < 0) {
     return NextResponse.json({ error: "Données repas incomplètes." }, { status: 400 });
   }
 
@@ -42,6 +46,11 @@ export async function POST(req: NextRequest) {
     userId,
     date:      body.date ?? new Date().toISOString().split("T")[0],
     meal:      body.meal,
+    ingredientId: body.ingredientId ?? null,
+    ingredientUuid: body.ingredientUuid ?? null,
+    sourceName: body.sourceName ?? "Wger",
+    brand: body.brand ?? null,
+    weightUnit: body.weightUnit ?? null,
     foodName:  body.foodName,
     emoji:     body.emoji ?? "🍽️",
     quantity:  body.quantity ?? 100,

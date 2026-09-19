@@ -60,9 +60,14 @@ export async function GET() {
         muscles: [],
       };
       current.sessions += 1;
-      current.totalSets += result.setsCompleted ?? 0;
-      current.latestSets = result.setsCompleted ?? 0;
-      current.deltaSets = current.sessions > 1 ? current.latestSets - (current.totalSets - current.latestSets) / (current.sessions - 1) : 0;
+      const completedSets = result.sets?.length
+        ? result.sets.filter((set: { completed?: boolean; skipped?: boolean }) => set.completed && !set.skipped).length
+        : result.setsCompleted ?? 0;
+      current.totalSets += completedSets;
+      current.latestSets = completedSets;
+      current.deltaSets = current.sessions > 1
+        ? current.latestSets - (current.totalSets - current.latestSets) / (current.sessions - 1)
+        : 0;
       exerciseMap.set(result.exerciseId, current);
     }
   }
@@ -93,6 +98,7 @@ export async function GET() {
     weekCalories,
     weekSessions:    weekSessions.length,
     streak:          profile?.streak ?? 0,
+    weeklyStreak:    profile?.weeklyStreak ?? 0,
     recentSessions:  sessions.slice(0, 12),
     weightHistory:   weights,
     weightDelta: initialWeight !== null && currentWeight !== null ? currentWeight - initialWeight : 0,

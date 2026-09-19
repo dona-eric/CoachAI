@@ -3,7 +3,9 @@ import { getDb } from "@/lib/mongodb";
 import { searchWgerFoods } from "@/lib/wger";
 
 export async function GET(req: NextRequest) {
-  const search = new URL(req.url).searchParams.get("search")?.trim() ?? "";
+  const params = new URL(req.url).searchParams;
+  const search = params.get("search")?.trim() ?? "";
+  const page = Math.max(1, Number.parseInt(params.get("page") ?? "1", 10) || 1);
   if (search.length < 2) {
     return NextResponse.json({ source: "wger", foods: [] });
   }
@@ -11,7 +13,7 @@ export async function GET(req: NextRequest) {
   const db = await getDb();
   await db.collection("wgerFoods").createIndex({ id: 1 }, { unique: true });
   try {
-    const foods = await searchWgerFoods(search);
+    const foods = await searchWgerFoods(search, page);
     if (foods.length > 0) {
       await db.collection("wgerFoods").bulkWrite(
         foods.map(food => ({
@@ -23,7 +25,7 @@ export async function GET(req: NextRequest) {
         })),
       );
     }
-    return NextResponse.json({ source: "wger", foods });
+    return NextResponse.json({ source: "wger", foods, page, pageSize: foods.length });
   } catch (error) {
     console.error("[NUTRITION] Wger food search failed:", error);
     const foods = await db.collection("wgerFoods")
