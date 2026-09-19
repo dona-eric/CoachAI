@@ -75,6 +75,12 @@ export async function POST(req: NextRequest) {
     );
   } catch (error) {
     console.error("[REGISTER] Erreur:", error);
-    return NextResponse.json({ error: "Erreur serveur. Réessayez." }, { status: 500 });
+    const isMongoSelectionError = error instanceof Error && error.name === "MongoServerSelectionError";
+    return NextResponse.json(
+      { error: isMongoSelectionError
+        ? "La base de données est momentanément indisponible. Réessayez dans quelques instants."
+        : "Erreur serveur. Réessayez." },
+      { status: isMongoSelectionError ? 503 : 500 },
+    );
   }
 }
