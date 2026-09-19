@@ -49,7 +49,7 @@ export default function Sidebar() {
           <div>
             <KineticBrand size="md" />
             <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-              Fitness Platform
+              Master your movement.
             </div>
           </div>
         </Link>
