@@ -31,17 +31,23 @@ function longestStreak(dates: string[]): number {
 }
 
 function weekendStreak(sessions: { date?: string }[]): number {
-  const weekends = new Set<string>();
+  const weekendDays = new Map<string, Set<number>>();
   for (const session of sessions) {
     if (!session.date) continue;
     const date = new Date(`${session.date}T00:00:00Z`);
     if (date.getUTCDay() === 0 || date.getUTCDay() === 6) {
       const saturday = new Date(date);
       saturday.setUTCDate(date.getUTCDate() - (date.getUTCDay() === 0 ? 1 : 0));
-      weekends.add(saturday.toISOString().slice(0, 10));
+      const key = saturday.toISOString().slice(0, 10);
+      const days = weekendDays.get(key) ?? new Set<number>();
+      days.add(date.getUTCDay());
+      weekendDays.set(key, days);
     }
   }
-  const sorted = [...weekends].sort();
+  const sorted = [...weekendDays]
+    .filter(([, days]) => days.has(0) && days.has(6))
+    .map(([date]) => date)
+    .sort();
   let longest = 0;
   let current = 0;
   let previous: Date | null = null;
