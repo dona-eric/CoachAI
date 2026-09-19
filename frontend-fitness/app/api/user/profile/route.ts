@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { getDb } from "@/lib/mongodb";
 import { UserProfile } from "@/lib/types";
+import { ObjectId } from "mongodb";
 
 // GET — récupérer le profil de l'utilisateur connecté
 export async function GET() {
@@ -27,7 +28,10 @@ export async function PATCH(req: NextRequest) {
   if (!session?.user) return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
 
   const userId = session.user.id;
-  const body: Partial<UserProfile> = await req.json();
+  const body: Partial<UserProfile> & { name?: string } = await req.json();
+  if (body.name !== undefined && (typeof body.name !== "string" || body.name.trim().length < 2 || body.name.trim().length > 80)) {
+    return NextResponse.json({ error: "Nom invalide." }, { status: 400 });
+  }
 
   if (body.age !== undefined && (!Number.isInteger(body.age) || body.age < 13 || body.age > 100)) {
     return NextResponse.json({ error: "Âge invalide." }, { status: 400 });
@@ -52,6 +56,12 @@ export async function PATCH(req: NextRequest) {
   update.updatedAt = new Date();
 
   const db = await getDb();
+  if (body.name !== undefined) {
+    await db.collection("users").updateOne(
+      { _id: new ObjectId(userId) },
+      { $set: { name: body.name.trim() } },
+    );
+  }
   await db.collection("userProfiles").updateOne(
     { userId },
     { $set: update },
