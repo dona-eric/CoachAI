@@ -4,14 +4,28 @@ import Link from 'next/link';
 import { ChevronLeft, Play, SkipForward, Check, X, Trophy, Flame, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
-import type { UserTrainingPlan } from '@/lib/types';
+import type { SetResult, UserTrainingPlan } from '@/lib/types';
+
+type WorkoutDraft = {
+  phase: 'session';
+  exIndex: number;
+  setsDone: number;
+  restMode: boolean;
+  timer: number;
+  running: boolean;
+  startTime: number;
+  repsCompleted: string;
+  weightUsed: string;
+  setResults: Record<string, SetResult[]>;
+};
 
 export default function SessionPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = React.use(params);
   const [plan, setPlan] = useState<UserTrainingPlan | null>(null);
   const [loading, setLoading] = useState(true);
-  const workDays = plan?.weeklyPlan.filter(d => !d.isRest) ?? [];
-  const allExercises = workDays[0]?.exercises ?? [];
+  const todayIndex = (new Date().getDay() + 6) % 7;
+  const todayPlanDay = plan?.weeklyPlan[todayIndex] ?? plan?.weeklyPlan.find(day => !day.isRest);
+  const allExercises = todayPlanDay?.exercises ?? [];
 
   const [phase, setPhase] = useState<'overview' | 'session' | 'done'>('overview');
   const [exIndex, setExIndex] = useState(0);
@@ -27,9 +41,11 @@ export default function SessionPage({ params }: { params: Promise<{ id: string }
   const [caloriesBurned, setCaloriesBurned] = useState(0);
   const [repsCompleted, setRepsCompleted] = useState('');
   const [weightUsed, setWeightUsed] = useState('');
-  const [exerciseResults, setExerciseResults] = useState<Record<string, { repsCompleted?: number; weightUsed?: number }>>({});
+  const [setResults, setSetResults] = useState<Record<string, SetResult[]>>({});
+  const [hasDraft, setHasDraft] = useState(false);
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const draftKey = `kinetic-workout-draft:${resolvedParams.id}`;
 
   useEffect(() => {
     fetch(`/api/training-plans/${resolvedParams.id}`)
@@ -41,6 +57,50 @@ export default function SessionPage({ params }: { params: Promise<{ id: string }
       .catch(error => console.error('[WORKOUT] Failed to load plan:', error))
       .finally(() => setLoading(false));
   }, [resolvedParams.id]);
+
+  useEffect(() => {
+    if (!plan || typeof window === 'undefined') return;
+    const rawDraft = window.localStorage.getItem(draftKey);
+    if (!rawDraft) return;
+    try {
+      const draft = JSON.parse(rawDraft) as WorkoutDraft;
+      if (draft.phase !== 'session' || !Number.isInteger(draft.exIndex) || draft.exIndex < 0 || draft.exIndex >= allExercises.length) {
+        window.localStorage.removeItem(draftKey);
+        return;
+      }
+      setExIndex(draft.exIndex);
+      setSetsDone(Math.max(0, draft.setsDone));
+      setRestMode(Boolean(draft.restMode));
+      setTimer(Math.max(0, draft.timer));
+      setRunning(Boolean(draft.running));
+      setStartTime(Number.isFinite(draft.startTime) ? draft.startTime : Date.now());
+      setRepsCompleted(draft.repsCompleted ?? '');
+      setWeightUsed(draft.weightUsed ?? '');
+      setSetResults(draft.setResults ?? {});
+      setPhase('session');
+      setHasDraft(true);
+    } catch (error) {
+      console.error('[WORKOUT] Invalid saved draft:', error);
+      window.localStorage.removeItem(draftKey);
+    }
+  }, [plan, draftKey, allExercises.length]);
+
+  useEffect(() => {
+    if (phase !== 'session' || !startTime || typeof window === 'undefined') return;
+    const draft: WorkoutDraft = {
+      phase,
+      exIndex,
+      setsDone,
+      restMode,
+      timer,
+      running,
+      startTime,
+      repsCompleted,
+      weightUsed,
+      setResults,
+    };
+    window.localStorage.setItem(draftKey, JSON.stringify(draft));
+  }, [phase, exIndex, setsDone, restMode, timer, running, startTime, repsCompleted, weightUsed, setResults, draftKey]);
 
   const currentEx = allExercises[exIndex];
   const totalSets = currentEx?.sets ?? 0;
@@ -87,22 +147,24 @@ export default function SessionPage({ params }: { params: Promise<{ id: string }
   };
 
   const startSession = () => {
-    setStartTime(Date.now());
+    if (!hasDraft) setStartTime(Date.now());
     setPhase('session');
+    setHasDraft(false);
   };
 
   const handleSetDone = () => {
-    if (currentEx) {
-      const reps = Number.parseInt(repsCompleted, 10);
-      const usedWeight = Number.parseFloat(weightUsed);
-      setExerciseResults(previous => ({
-        ...previous,
-        [currentEx.exerciseId]: {
-          repsCompleted: Number.isFinite(reps) && reps > 0 ? reps : previous[currentEx.exerciseId]?.repsCompleted,
-          weightUsed: Number.isFinite(usedWeight) && usedWeight >= 0 ? usedWeight : previous[currentEx.exerciseId]?.weightUsed,
-        },
-      }));
-    }
+    if (!currentEx) return;
+    const reps = Number.parseInt(repsCompleted, 10);
+    const usedWeight = Number.parseFloat(weightUsed);
+    const completedSet: SetResult = {
+      setNumber: setsDone + 1,
+      ...(Number.isFinite(reps) && reps > 0 ? { repsCompleted: reps } : {}),
+      ...(Number.isFinite(usedWeight) && usedWeight >= 0 ? { weightUsed: usedWeight } : {}),
+      completed: true,
+      restSeconds: restTime,
+    };
+    const nextSets = [...(setResults[currentEx.exerciseId] ?? []), completedSet];
+    setSetResults(previous => ({ ...previous, [currentEx.exerciseId]: nextSets }));
     const next = setsDone + 1;
     if (next >= totalSets) {
       if (exIndex + 1 >= allExercises.length) {
@@ -132,28 +194,36 @@ export default function SessionPage({ params }: { params: Promise<{ id: string }
             mood: 4,
             notes: "Séance complétée via mode direct.",
             exerciseResults: allExercises.map(ex => {
-              const tracked = ex.exerciseId === currentEx?.exerciseId
-                ? {
-                    repsCompleted: Number.parseInt(repsCompleted, 10),
-                    weightUsed: Number.parseFloat(weightUsed),
-                  }
-                : exerciseResults[ex.exerciseId];
-              const trackedReps = tracked?.repsCompleted;
-              const trackedWeight = tracked?.weightUsed;
+              const sets = ex.exerciseId === currentEx.exerciseId
+                ? nextSets
+                : (setResults[ex.exerciseId] ?? []);
+              const completed = sets.filter(set => set.completed && !set.skipped);
+              const trackedReps = completed.at(-1)?.repsCompleted;
+              const trackedWeight = completed.at(-1)?.weightUsed;
               return {
                 exerciseId: ex.exerciseId,
                 exerciseName: ex.exerciseName,
-                setsCompleted: ex.sets,
+                plannedSets: ex.sets,
+                plannedReps: ex.reps,
+                setsCompleted: completed.length,
+                sets,
+                completed: completed.length === ex.sets,
                 ...(trackedReps !== undefined && Number.isFinite(trackedReps) && trackedReps > 0 ? { repsCompleted: trackedReps } : {}),
                 ...(trackedWeight !== undefined && Number.isFinite(trackedWeight) && trackedWeight >= 0 ? { weightUsed: trackedWeight } : {}),
               };
             }),
           })
+        }).then(response => {
+          if (!response.ok) throw new Error(`Workout save failed with ${response.status}`);
+          if (typeof window !== 'undefined') window.localStorage.removeItem(draftKey);
+          setHasDraft(false);
         }).catch(err => console.error("Failed to save workout", err));
 
       } else {
         setExIndex(i => i + 1);
         setSetsDone(0);
+        setRepsCompleted('');
+        setWeightUsed('');
         setRestMode(true);
         setTimer(restTime);
         setRunning(true);
@@ -167,9 +237,11 @@ export default function SessionPage({ params }: { params: Promise<{ id: string }
   };
 
   const skipRest = () => { setRunning(false); setRestMode(false); setTimer(0); };
-
-  const todayIndex = (new Date().getDay() + 6) % 7;
-  const todayPlanDay = plan.weeklyPlan[todayIndex] ?? workDays[0];
+  const exitSession = () => {
+    setRunning(false);
+    setPhase('overview');
+    setHasDraft(true);
+  };
 
   // ── Animation Variants ──
   const pageVariants = {
@@ -221,7 +293,7 @@ export default function SessionPage({ params }: { params: Promise<{ id: string }
                 style={{ width: '100%', fontSize: '1.1rem' }} 
                 onClick={startSession}
               >
-                <Play size={20} fill="#000" /> Démarrer la séance
+                <Play size={20} fill="#000" /> {hasDraft ? 'Reprendre la séance' : 'Démarrer la séance'}
               </motion.button>
             </div>
           )}
@@ -249,6 +321,21 @@ export default function SessionPage({ params }: { params: Promise<{ id: string }
             <div style={{ background: 'var(--bg-elevated)', padding: '16px 24px', borderRadius: 16, border: '1px solid var(--border)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 8, justifyContent: 'center' }}>
                 <Clock size={16} /> Temps
+              </div>
+
+              <div className="card" style={{ padding: 16, marginBottom: 24, textAlign: 'left' }}>
+                <div style={{ fontWeight: 700, marginBottom: 10 }}>Résumé de la séance</div>
+                {allExercises.map(exercise => {
+                  const completed = (setResults[exercise.exerciseId] ?? []).filter(set => set.completed && !set.skipped);
+                  return (
+                    <div key={exercise.exerciseId} style={{ display: 'flex', justifyContent: 'space-between', gap: 12, padding: '8px 0', borderBottom: '1px solid var(--border)', fontSize: '0.82rem' }}>
+                      <span>{exercise.exerciseName}</span>
+                      <span style={{ color: completed.length === exercise.sets ? 'var(--primary)' : 'var(--gold)', fontWeight: 700 }}>
+                        {completed.length}/{exercise.sets} séries
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
               <div style={{ fontSize: '1.5rem', fontWeight: 800 }}>{sessionDuration} <span style={{ fontSize: '1rem', color: 'var(--text-muted)' }}>min</span></div>
             </div>
@@ -286,7 +373,7 @@ export default function SessionPage({ params }: { params: Promise<{ id: string }
           <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
             Exercice {exIndex + 1} / {allExercises.length}
           </span>
-          <button className="btn btn-ghost btn-sm" onClick={() => setPhase('overview')}>
+          <button className="btn btn-ghost btn-sm" onClick={exitSession}>
             <X size={16} /> Quitter
           </button>
         </div>
@@ -337,13 +424,20 @@ export default function SessionPage({ params }: { params: Promise<{ id: string }
                   transition={{ type: 'spring' }}
                   style={{ fontSize: '6rem', marginBottom: 16 }}
                 >
-                  {currentEx?.emoji}
+                  {currentEx?.imageUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={currentEx.imageUrl} alt="" style={{ width: 180, height: 140, objectFit: 'cover', borderRadius: 16 }} />
+                  ) : currentEx?.emoji}
                 </motion.div>
                 <h2 style={{ fontSize: '2.2rem', fontWeight: 900, marginBottom: 8, letterSpacing: '-0.02em' }}>
                   {currentEx?.exerciseName}
                 </h2>
                 <div style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', marginBottom: 24 }}>
                   <strong>{currentEx?.reps} répétitions</strong>
+                </div>
+                <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 24 }}>
+                  {currentEx?.muscles.map(muscle => <span className="badge badge-blue" key={muscle}>{muscle}</span>)}
+                  {currentEx?.equipment.map(item => <span className="badge badge-gray" key={item}>🛠️ {item}</span>)}
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, maxWidth: 420, margin: '0 auto 28px' }}>
                   <label style={{ textAlign: 'left', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
